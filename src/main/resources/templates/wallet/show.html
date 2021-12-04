@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Wallet Overview</title>
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-
+<h1>My Wallet</h1>
+<h2>hash</h2>
+<table>
+    <tr>
+        <th>Currency</th>
+        <th>Amount</th>
+        <th>Value ($)</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr th:each="asset : ${assets}">
+        <td th:text="${asset.currency.ticker}"></td>
+        <td th:text="${asset.amount}"></td>
+        <td th:text="${asset.amount * asset.currency.value}"></td>
+        <td><a href="#" th:href="${'/wallet/' + ${asset.id} + '/details'}">Details</a></td>
+        <td><a href="#" th:href="${'/trade/ETH' + ${asset.id}}">Sell</a></td>
+        <td><a href="#" th:href="${'/trade/' + ${asset.id} + '/ETH'}">Buy</a></td>
+        <td><a href="#" th:href="${'/transfer/' + ${asset.id}}">Transfer</a></td>
+    </tr>
+</table>
 </body>
 </html>
