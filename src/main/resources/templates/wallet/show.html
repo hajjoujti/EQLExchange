@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Wallet Overview</title>
@@ -20,8 +20,8 @@
     </tr>
     <tr th:each="asset : ${assets}">
         <td th:text="${asset.currency.ticker}"></td>
-        <td th:text="${asset.amount}"></td>
-        <td th:text="${asset.amount * asset.currency.value}"></td>
+        <td th:text="${asset.balance}"></td>
+        <td th:text="${asset.balance * asset.currency.value}"></td>
         <td><a href="#" th:href="${'/wallet/' + ${asset.id} + '/details'}">Details</a></td>
         <td><a href="#" th:href="${'/trade/ETH' + ${asset.id}}">Sell</a></td>
         <td><a href="#" th:href="${'/trade/' + ${asset.id} + '/ETH'}">Buy</a></td>
