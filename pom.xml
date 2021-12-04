@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.eql.al36.spring.projet</groupId>
-    <artifactId>EQLCOIN</artifactId>
+    <artifactId>EQLExchange</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>EQLCOIN</name>
-    <description>EQLCOIN</description>
+    <name>EQLExchange</name>
+    <description>The brand new EQL market place is coming.</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -21,10 +21,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
