@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface AssetRepository extends CrudRepository<Asset, Integer> {
 
-    List<Asset> getAssetByUserOrderByBalanceDesc(User user);
+    List<Asset> getAssetsByUserOrderByBalanceDesc(User user);
 }
