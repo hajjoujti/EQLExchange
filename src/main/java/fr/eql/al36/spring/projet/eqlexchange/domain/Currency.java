@@ -16,10 +16,10 @@ public class Currency {
 
     private String name;
     private String ticker;
-    private double price;
+    private double value;
     private String contractAddress;
-    private long availableSupply;
-    private long totalSupply;
+    private long maximumSupply;
+    private String circulatingSupply;
 
     @ManyToOne
     @JoinColumn(name = "currency_type_id")
