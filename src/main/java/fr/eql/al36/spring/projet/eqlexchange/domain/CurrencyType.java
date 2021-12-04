@@ -14,6 +14,8 @@ public class CurrencyType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String name;
+
     @OneToMany(mappedBy = "currencyType")
-    Set<Currency> currencyTypes;
+    Set<Currency> currencies;
 }
