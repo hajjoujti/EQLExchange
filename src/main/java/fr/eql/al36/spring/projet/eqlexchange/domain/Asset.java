@@ -24,9 +24,9 @@ public class Asset {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "payment")
+        @OneToMany(mappedBy = "asset")
     private Set<Payment> payments;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "asset")
     private Set<Order> orders;
 }
