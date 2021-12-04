@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EqlcoinApplication {
+public class EQLExchangeApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EqlcoinApplication.class, args);
+        SpringApplication.run(EQLExchangeApplication.class, args);
     }
 
 }
