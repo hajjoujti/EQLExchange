@@ -2,6 +2,8 @@ package fr.eql.al36.spring.projet.eqlexchange.service;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
 import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
+import fr.eql.al36.spring.projet.eqlexchange.domain.User;
+import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class TradeOrderService {
 
     private TradeOrderRepository tradeOrderRepository;
     private TransactionRepository transactionRepository;
+    private AssetRepository assetRepository;
+
     private final double MAX_SLIPPAGE_RATE = .97;
 
     // Returns Trade Order value in reference currency (dollar by design)
@@ -98,6 +102,11 @@ public class TradeOrderService {
         }
     }
 
+    public void place(TradeOrder tradeOrder, User connectedUser) {
+        if (assetRepository.getAssetByUserAndCurrency(connectedUser,tradeOrder.getCurrency()).getBalance() >= tradeOrder.getAmount()) {
+            tradeOrderRepository.save(tradeOrder);
+        }
+    }
     public TradeOrder createFromUnsatisfiedTransaction(Transaction transaction) {
 
         List<TradeOrder> sortedTradeOrders = getSortedByValue(transaction.getTradeOrder1(), transaction.getTradeOrder2());
