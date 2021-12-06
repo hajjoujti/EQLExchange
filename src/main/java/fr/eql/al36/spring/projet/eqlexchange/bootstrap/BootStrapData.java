@@ -283,19 +283,19 @@ public class BootStrapData implements CommandLineRunner {
         // ANNESOPHIE ASSET
 
         Asset annesophieDollar = assetRepository.save(Asset.builder()
-                .user(alain)
+                .user(annesophie)
                 .currency(dollar)
                 .balance(0)
                 .build());
 
         Asset annesophieEuro = assetRepository.save(Asset.builder()
-                .user(alain)
+                .user(annesophie)
                 .currency(euro)
                 .balance(35)
                 .build());
 
         Asset annesophiePound = assetRepository.save(Asset.builder()
-                .user(alain)
+                .user(annesophie)
                 .currency(pound)
                 .balance(0)
                 .build());
