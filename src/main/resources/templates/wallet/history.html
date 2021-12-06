@@ -8,6 +8,18 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <div>
+        <table>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Date</th>
+            </tr>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.txId}"></td>
+                <td th:text="${transaction.date}"></td>
+            </tr>
+        </table>
+    </div>
 </div>
 </body>
 </html>
