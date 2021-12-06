@@ -37,7 +37,7 @@ public class TransactionService {
     }
 
 
-    public List<Transaction> adde(Currency currency) {
+    public List<Transaction> getTransactionsDoneOnCurrency(Currency currency) {
         List<Asset> assets = assetRepository.getAllByCurrency(currency);
         List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
         return transactionRepository.findAllByTradeOrders(tradeOrders);
