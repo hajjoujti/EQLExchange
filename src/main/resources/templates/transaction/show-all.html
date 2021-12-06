@@ -10,15 +10,11 @@
     <div>
         <table>
             <tr>
-                <th>ID</th>
                 <th>Transaction ID</th>
-                <th>Remaining Amount</th>
                 <th>Date</th>
             </tr>
             <tr th:each="transaction : ${transactions}">
-                <td th:text="${transaction.id}"></td>
                 <td th:text="${transaction.txId}"></td>
-                <td th:text="${transaction.remainingAmount}"></td>
                 <td th:text="${transaction.date}"></td>
             </tr>
         </table>

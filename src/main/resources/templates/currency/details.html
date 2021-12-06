@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Currency</title>
+    <link rel="stylesheet" href="/css/details.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="coin-container">
+        <div id="content">
+            <div class="ecoin">
+                <h1 class="mb-4">E-coin</h1>
+                <div>
+                    <h2 class="mb-4">5.55 $</h2>
+                </div>
+                <div class="ecoin-exchange">
+                    <div class="ecoin-buy">
+                        <button type="button" class="btn-buy">Buy</button>
+                    </div>
+                    <div class="ecoin-sell">
+                        <button type="button" class="btn-sell">Sell</button>
+                    </div>
+                </div>
+
+                <canvas id="myChart" class="chart-currency"></canvas>
+
+                <h2 class="mb-4">Last transactions</h2>
+
+                <table class="table table-dark">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Price EQL</th>
+                        <th scope="col">Amount EQL</th>
+                        <th scope="col">Total USD</th>
+                        <th scope="col">Maker</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+
+    var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+    var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+
+    new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "white",
+                borderColor: "white",
+                data: yValues
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 6, max: 16}}],
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
