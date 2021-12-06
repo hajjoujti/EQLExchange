@@ -1,6 +1,5 @@
 package fr.eql.al36.spring.projet.eqlexchange.service;
 
-import fr.eql.al36.spring.projet.eqlexchange.controller.AssetService;
 import fr.eql.al36.spring.projet.eqlexchange.domain.Asset;
 import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
 import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
