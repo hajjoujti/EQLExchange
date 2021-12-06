@@ -1,4 +1,4 @@
-package fr.eql.al36.spring.projet.eqlexchange.controller;
+package fr.eql.al36.spring.projet.eqlexchange.service;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.Asset;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;

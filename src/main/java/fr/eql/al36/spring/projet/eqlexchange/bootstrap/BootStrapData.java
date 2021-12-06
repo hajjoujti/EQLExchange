@@ -323,7 +323,7 @@ public class BootStrapData implements CommandLineRunner {
         // Alain (3) gets 118.1 EQL (/!\ only a part of order 6's amount)
         // Robert (6) gets 0.0012 BTC (order 3's amount)
 
-        to5.setAmount(to5.getAmount() + to3.getAmount());
+        to6.setAmount(to6.getAmount() + to3.getAmount());
 
         Transaction transaction2 = transactionRepository.save(Transaction.builder().date(
                 LocalDateTime.of(2021, 6, 3, 11, 4, 5)).remainingAmount(40.9).txId(

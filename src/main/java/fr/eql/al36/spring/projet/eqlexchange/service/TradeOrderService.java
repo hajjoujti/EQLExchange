@@ -3,8 +3,9 @@ package fr.eql.al36.spring.projet.eqlexchange.service;
 import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
 import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyPriceRepository;
+import fr.eql.al36.spring.projet.eqlexchange.domain.User;
+import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
-import fr.eql.al36.spring.projet.eqlexchange.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,12 +17,16 @@ public class TradeOrderService {
 
     private final TradeOrderRepository tradeOrderRepository;
     private final CurrencyPriceRepository currencyPriceRepository;
+    private final AssetRepository assetRepository;
+
     private final double MAX_SLIPPAGE_RATE = .97;
 
 
-    public TradeOrderService(TradeOrderRepository tradeOrderRepository, CurrencyPriceRepository currencyPriceRepository) {
+    public TradeOrderService(TradeOrderRepository tradeOrderRepository, CurrencyPriceRepository currencyPriceRepository,
+                             AssetRepository assetRepository) {
         this.tradeOrderRepository = tradeOrderRepository;
         this.currencyPriceRepository = currencyPriceRepository;
+        this.assetRepository = assetRepository;
     }
 
 
@@ -103,6 +108,11 @@ public class TradeOrderService {
         }
     }
 
+    public void place(TradeOrder tradeOrder, User connectedUser) {
+        if (assetRepository.getAssetByUserAndCurrency(connectedUser,tradeOrder.getCurrency()).getBalance() >= tradeOrder.getAmount()) {
+            tradeOrderRepository.save(tradeOrder);
+        }
+    }
     public TradeOrder createFromUnsatisfiedTransaction(Transaction transaction) {
 
         List<TradeOrder> sortedTradeOrders = getSortedByValue(transaction.getTradeOrder1(), transaction.getTradeOrder2());
