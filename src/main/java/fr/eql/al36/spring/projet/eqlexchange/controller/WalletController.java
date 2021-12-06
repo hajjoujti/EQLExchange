@@ -29,7 +29,7 @@ public class WalletController {
         return "index";
     }
 
-    @GetMapping("wallet/show")
+    @GetMapping("wallet")
     public String displayWallet(Model model) {
         model.addAttribute("assets", assetRepository.getAssetsByUserOrderByBalanceDesc(userRepository.findById(2).get()));
         return "wallet/show";
@@ -40,5 +40,10 @@ public class WalletController {
         model.addAttribute("asset", assetRepository.findById(Integer.parseInt(id)).get());
         model.addAttribute(transactionRepository.findById(id).get());
         return "wallet/details";
+    }
+
+    @GetMapping("wallet/transactions")
+    public String displayTransactions(Model model) {
+        return "wallet/history";
     }
 }
