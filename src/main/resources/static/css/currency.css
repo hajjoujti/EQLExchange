@@ -32,7 +32,7 @@ background-color: black;
 }
 
 .btn-buy {
-    background-color: green;
+    background-color: #28a745;
     padding: 15px;
     color: white;
     display: inline-block;
@@ -75,4 +75,19 @@ background-color: black;
 
 .coin-container {
     color: white;
+}
+.table-dark {
+    margin-top: 50px;
+}
+.table>:not(caption)>*>* {
+    padding: 0.5rem 0.5rem;
+    background-color: black !important;
+    border-bottom-width: 0px !important;
+    text-align: center !important;
+}
+
+.currency-move {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
 }
