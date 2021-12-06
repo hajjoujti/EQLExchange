@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Transaction ID</th>
+                <th>Remaining Amount</th>
+                <th>Date</th>
+            </tr>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.id}"></td>
+                <td th:text="${transaction.txId}"></td>
+                <td th:text="${transaction.remainingAmount}"></td>
+                <td th:text="${transaction.date}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
