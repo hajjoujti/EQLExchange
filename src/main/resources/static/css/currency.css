@@ -39,10 +39,9 @@ background-color: black;
     text-transform: capitalize;
     font-size: 20px;
     font-weight: 500;
-    padding: 14px 30px;
+    padding: 14px 40px;
     border: none;
     border-radius: 30px;
-
 }
 
 .btn-sell {
@@ -53,9 +52,19 @@ background-color: black;
     text-transform: capitalize;
     font-size: 20px;
     font-weight: 500;
-    padding: 14px 30px;
+    padding: 14px 40px;
     border: none;
     border-radius: 30px;
+}
+
+.btn-sell:hover {
+    background-color: #97122e;
+    cursor: pointer;
+}
+
+.btn-buy:hover {
+    background-color: green;
+    cursor: pointer;
 }
 
 .chart-currency {
