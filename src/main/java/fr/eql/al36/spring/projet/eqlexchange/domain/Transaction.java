@@ -1,5 +1,6 @@
 package fr.eql.al36.spring.projet.eqlexchange.domain;
 
+import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,8 +21,11 @@ public class Transaction {
     private String txId;
     private double remainingAmount;
 
-    @OneToMany(mappedBy = "transaction")
-    Set<TradeOrder> tradeOrders;
+    @OneToOne
+    private TradeOrder tradeOrder1;
+
+    @OneToOne
+    private TradeOrder tradeOrder2;
 
     @Override
     public boolean equals(Object o) {
