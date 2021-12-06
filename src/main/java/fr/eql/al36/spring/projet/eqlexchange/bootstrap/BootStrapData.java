@@ -1,14 +1,16 @@
 package fr.eql.al36.spring.projet.eqlexchange.bootstrap;
 
-import fr.eql.al36.spring.projet.eqlexchange.domain.Asset;
-import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
-import fr.eql.al36.spring.projet.eqlexchange.domain.CurrencyType;
-import fr.eql.al36.spring.projet.eqlexchange.domain.User;
+import fr.eql.al36.spring.projet.eqlexchange.domain.*;
 import fr.eql.al36.spring.projet.eqlexchange.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class BootStrapData implements CommandLineRunner {
@@ -156,7 +158,7 @@ public class BootStrapData implements CommandLineRunner {
                 .build());
 
         User annesophie = userRepository.save(User.builder()
-                .firstName("annesophie")
+                .firstName("Anne-Sophie")
                 .lastName("Ladouille")
                 .username("douilledu13")
                 .dateOfBirth(LocalDate.of(1994,4,1))
@@ -377,5 +379,140 @@ public class BootStrapData implements CommandLineRunner {
                 .currency(eqlcoin)
                 .balance(0)
                 .build());
+
+
+        ////////////////////////////////
+        // TRADE ORDERS
+        ////////////////////////////////
+
+
+        // ALAIN TRADE ORDERS
+
+        // Alain wants to sell .0015 BTC for BNB
+        TradeOrder to1 = tradeOrderRepository.save(TradeOrder.builder()
+                        .asset(alainBitcoin)
+                        .currency(binanceCoin)
+                        .amount(.0015)
+                        .creationDate(LocalDateTime.of(2021,6,2,18,6,52))
+                .build());
+
+        // Alain wants to sell .027 ETH for BNB
+        TradeOrder to2 = tradeOrderRepository.save(TradeOrder.builder()
+                        .asset(alainEthereum)
+                        .currency(binanceCoin)
+                        .amount(.027)
+                        .creationDate(LocalDateTime.of(2021,6,2,18,27,04))
+                .build());
+
+        // Alain wants to sell .0012 BTC for EQL
+        TradeOrder to3 = tradeOrderRepository.save(TradeOrder.builder()
+                        .asset(alainBitcoin)
+                        .currency(eqlcoin)
+                        .amount(0.0012)
+                        .creationDate(LocalDateTime.of(2021,6,2,19,1,44))
+                .build());
+
+
+        // ANNE-SOPHIE TRADE ORDERS
+
+        // Anne-Sophie wants to sell .002 BTC for EQL
+        TradeOrder to4 = tradeOrderRepository.save(TradeOrder.builder()
+                        .asset(annesophieBitcoin)
+                        .amount(0.002)
+                        .currency(eqlcoin)
+                        .creationDate(LocalDateTime.of(2021,6,3,9,26,11))
+                .build());
+
+        // Anne-Sophie wants to sell .0194 BNB for ETH
+        TradeOrder to5 = tradeOrderRepository.save(TradeOrder.builder()
+                .asset(annesophieBinanceCoin)
+                .amount(0.194)
+                .currency(ethereum)
+                .creationDate(LocalDateTime.of(2021,6,3,10,01,57))
+                .build());
+
+
+        // ROBERT TRADE ORDERS
+
+        // Robert wants to sell 200 EQL for BTC
+        TradeOrder to6 = tradeOrderRepository.save(TradeOrder.builder()
+                .asset(robertEQLCoin)
+                .amount(200)
+                .currency(bitcoin)
+                .creationDate(LocalDateTime.of(2021,6,3,11,04,3))
+                .build());
+
+        // Robert wants to sell .021 BNB for EQL
+        TradeOrder to7 = tradeOrderRepository.save(TradeOrder.builder()
+                .asset(robertBinanceCoin)
+                .amount(0.021)
+                .currency(eqlcoin)
+                .creationDate(LocalDateTime.of(2021,6,3,11,07,21))
+                .build());
+
+
+        ////////////////////////////////
+        // TRANSACTIONS
+        ////////////////////////////////
+
+
+        // TRANSACTION 1
+
+        // Involves orders 2 and 5
+
+        // Alain (2) gets 0.194 BNB (order 5's amount) and Anne-Sophie (5) gets 0.027 ETH (order 2's amount)
+
+        // 1. Alain's ETH asset is debited with order 3's amount
+        Asset alainWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(to2.getAsset().getUser(),to2.getCurrency());
+        alainWantedCurrencyAsset.setBalance(alainWantedCurrencyAsset.getBalance() - to5.getAmount());
+
+        // 2. Anne-Sophie's BNB asset is debited with order 3's amount
+        Asset annesophieWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(to5.getAsset().getUser(),to5.getCurrency());
+        alainWantedCurrencyAsset.setBalance(alainWantedCurrencyAsset.getBalance() - to2.getAmount());
+
+
+        // 3. Alain's BNB asset is credited with his order's amount
+        to2.getAsset().setBalance(to2.getAsset().getBalance() + to2.getAmount());
+
+        // 3. Anne-Sophie's ETH asset is credited with her order's amount
+        to5.getAsset().setBalance(to5.getAsset().getBalance() + to5.getAmount());
+
+        // Both orders are completely satisfied and are updated with completion date
+
+        Transaction transaction1 = transactionRepository.save(Transaction.builder()
+                        .date(LocalDateTime.of(2021,6,3,10,2,1))
+                        .remainingAmount(0)
+                        .txId("tx_c4ca4238a0b923820dcc509a6f75849b")
+                        .tradeOrder1(to2)
+                        .tradeOrder2(to5)
+                .build());
+
+
+        // TRANSACTION 2
+
+        // Involves orders 3 and 6
+        // Alain (3) gets 118.1 EQL (/!\ only a part of order 6's amount)
+        // Robert (6) gets 0.0012 BTC (order 3's amount)
+
+        to5.setAmount(to5.getAmount() + to3.getAmount());
+
+        Transaction transaction2 = transactionRepository.save(Transaction.builder()
+                .date(LocalDateTime.of(2021,6,3,11,4,5))
+                .remainingAmount(40.9)
+                .txId("tx_c81e728d9d4c2f636f067f89cc14862c")
+                .tradeOrder1(to3)
+                .tradeOrder2(to6)
+                .build());
+
+        // Order 3 is satisfied, but not order 6
+        // A new order is created with Order 6 remaining amount at the end transaction completion
+
+        TradeOrder to8 = tradeOrderRepository.save(TradeOrder.builder()
+                .asset(robertEQLCoin)
+                .amount(transaction2.getRemainingAmount())
+                .currency(bitcoin)
+                .creationDate(LocalDateTime.of(2021,6,3,11,4,7))
+                .build());
+
     }
 }
