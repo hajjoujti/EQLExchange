@@ -16,7 +16,7 @@ public class BootStrapData implements CommandLineRunner {
     private final AssetRepository assetRepository;
     private final CurrencyRepository currencyRepository;
     private final CurrencyTypeRepository currencyTypeRepository;
-    private final OrderRepository orderRepository;
+    private final TradeOrderRepository tradeOrderRepository;
     private final PaymentRepository paymentRepository;
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
@@ -24,7 +24,7 @@ public class BootStrapData implements CommandLineRunner {
     public BootStrapData(AssetRepository assetRepository,
                          CurrencyRepository currencyRepository,
                          CurrencyTypeRepository currencyTypeRepository,
-                         OrderRepository orderRepository,
+                         TradeOrderRepository tradeOrderRepository,
                          PaymentRepository paymentRepository,
                          TransactionRepository transactionRepository,
                          UserRepository userRepository) {
@@ -32,7 +32,7 @@ public class BootStrapData implements CommandLineRunner {
         this.assetRepository = assetRepository;
         this.currencyRepository = currencyRepository;
         this.currencyTypeRepository = currencyTypeRepository;
-        this.orderRepository = orderRepository;
+        this.tradeOrderRepository = tradeOrderRepository;
         this.paymentRepository = paymentRepository;
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;

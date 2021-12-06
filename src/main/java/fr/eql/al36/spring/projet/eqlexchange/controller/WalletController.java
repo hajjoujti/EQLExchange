@@ -1,7 +1,7 @@
 package fr.eql.al36.spring.projet.eqlexchange.controller;
 
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
-import fr.eql.al36.spring.projet.eqlexchange.repository.OrderRepository;
+import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TransactionRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class WalletController {
 
     private final AssetRepository assetRepository;
-    private final OrderRepository orderRepository;
+    private final TradeOrderRepository tradeOrderRepository;
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
 
-    public WalletController(AssetRepository assetRepository, OrderRepository orderRepository, TransactionRepository transactionRepository, UserRepository userRepository) {
+    public WalletController(AssetRepository assetRepository, TradeOrderRepository tradeOrderRepository, TransactionRepository transactionRepository, UserRepository userRepository) {
         this.assetRepository = assetRepository;
-        this.orderRepository = orderRepository;
+        this.tradeOrderRepository = tradeOrderRepository;
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
     }

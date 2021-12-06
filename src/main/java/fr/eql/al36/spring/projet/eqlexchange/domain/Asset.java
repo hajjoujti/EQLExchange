@@ -3,6 +3,7 @@ package fr.eql.al36.spring.projet.eqlexchange.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -28,5 +29,18 @@ public class Asset {
     private Set<Payment> payments;
 
     @OneToMany(mappedBy = "asset")
-    private Set<Order> orders;
+    private Set<TradeOrder> tradeOrders;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Asset asset = (Asset) o;
+        return Double.compare(asset.balance, balance) == 0 && Objects.equals(id, asset.id) && Objects.equals(currency, asset.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, balance, currency);
+    }
 }
