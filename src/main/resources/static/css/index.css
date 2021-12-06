@@ -1852,7 +1852,6 @@ ol {
     transition: all 0.3s ease-out 0s;
     position: relative;
     padding: 35px 0;
-    display: -webkit-inline-box;
     display: -ms-inline-flexbox;
     display: inline-flex;
     -webkit-box-align: center;
@@ -2905,4 +2904,50 @@ ol {
 
 .footer .copyright-area p a:hover {
     color: #3E80FF;
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 400px;
+    }
+    .modal-dialog .modal-content {
+        padding: 1rem;
+    }
+}
+.modal-header .close {
+    margin-top: -1.5rem;
+}
+
+.form-title {
+    margin: -2rem 0rem 2rem;
+}
+
+.btn-round {
+    border-radius: 3rem;
+}
+
+.delimiter {
+    padding: 1rem;
+}
+
+.social-buttons .btn {
+    margin: 0 0.5rem 1rem;
+}
+
+.signup-section {
+    padding: 0.3rem 0rem;
+}
+
+.modal-content {
+    z-index: 1041 !important;
+}
+
+.form-control {
+    margin-bottom: 15px;
+}
+
+.close {
+    background-color: white;
+    border: none;
+    font-size: 30px;
 }
