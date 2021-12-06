@@ -7,6 +7,7 @@ import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
 import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
 import fr.eql.al36.spring.projet.eqlexchange.domain.User;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
+import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyPriceRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
@@ -22,19 +23,19 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final TradeOrderRepository tradeOrderRepository;
     private final AssetRepository assetRepository;
+    private final CurrencyPriceRepository currencyPriceRepository;
 
 
-    public TransactionService(AssetService assetService,
-                              TradeOrderService tradeOrderService,
-                              TransactionRepository transactionRepository,
-                              TradeOrderRepository tradeOrderRepository,
-                              AssetRepository assetRepository) {
+    public TransactionService(AssetService assetService, TradeOrderService tradeOrderService,
+                              TransactionRepository transactionRepository, TradeOrderRepository tradeOrderRepository,
+                              AssetRepository assetRepository, CurrencyPriceRepository currencyPriceRepository) {
 
         this.assetService = assetService;
         this.tradeOrderService = tradeOrderService;
         this.transactionRepository = transactionRepository;
         this.tradeOrderRepository = tradeOrderRepository;
         this.assetRepository = assetRepository;
+        this.currencyPriceRepository = currencyPriceRepository;
     }
 
     public List<Transaction> getTransactionsDoneByUser(User user) {
@@ -54,7 +55,7 @@ public class TransactionService {
 
         if(tradeOrder1.getAsset().getCurrency() != tradeOrder2.getCurrency() || tradeOrder2.getAsset().getCurrency() != tradeOrder1.getCurrency()) return;
 
-        double remainingAmount = 0;
+        double remainingAmount;
 
         List<TradeOrder> sortedTradeOrders = tradeOrderService.getSortedByValue(tradeOrder1, tradeOrder2);
         TradeOrder biggerTradeOrder = sortedTradeOrders.get(0);
@@ -66,19 +67,19 @@ public class TransactionService {
                 assetRepository.getAssetByUserAndCurrency(
                         biggerTradeOrder.getAsset().getUser(),
                         biggerTradeOrder.getCurrency()),
-                transactionValue / biggerTradeOrder.getCurrency().getValue());
+                transactionValue / currencyPriceRepository.findTopByCurrencyOrderByIdDesc(biggerTradeOrder.getCurrency()).getPrice());
 
         assetService.creditFromSourceAsset(
                 biggerTradeOrder.getAsset(),
                 assetRepository.getAssetByUserAndCurrency(
                         smallerTradeOrder.getAsset().getUser(),
                         smallerTradeOrder.getCurrency()),
-                transactionValue / smallerTradeOrder.getCurrency().getValue());
+                transactionValue / currencyPriceRepository.findTopByCurrencyOrderByIdDesc(smallerTradeOrder.getCurrency()).getPrice());
 
         if (tradeOrderService.haveSameReferenceValue(tradeOrder1,tradeOrder2)) {
             remainingAmount = 0;
         } else {
-            remainingAmount = (tradeOrderService.getReferenceValue(biggerTradeOrder) - transactionValue) / biggerTradeOrder.getAsset().getCurrency().getValue();
+            remainingAmount = (tradeOrderService.getReferenceValue(biggerTradeOrder) - transactionValue) / currencyPriceRepository.findTopByCurrencyOrderByIdDesc(biggerTradeOrder.getCurrency()).getPrice();
         }
 
         Transaction transaction = transactionRepository.save(Transaction.builder()
