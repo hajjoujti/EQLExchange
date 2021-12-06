@@ -38,7 +38,6 @@ public class WalletController {
     @GetMapping("wallet/{id}")
     public String displayAsset(Model model, @PathVariable String id) {
         model.addAttribute("asset", assetRepository.findById(Integer.parseInt(id)).get());
-        model.addAttribute(transactionRepository.findById(id).get());
         return "wallet/details";
     }
 
