@@ -17,4 +17,6 @@ public interface AssetRepository extends CrudRepository<Asset, Integer> {
     Asset getAssetByUserAndCurrency(@Param("user") User user, @Param("currency") Currency currency);
 
     List<Asset> getAllByUser(User user);
+
+    List<Asset> getAllByCurrency(Currency currency);
 }
