@@ -17,7 +17,6 @@ public class Currency {
 
     private String name;
     private String ticker;
-    private double value;
     private String contractAddress;
     private long maximumSupply;
     private String circulatingSupply;
@@ -32,16 +31,25 @@ public class Currency {
     @OneToMany(mappedBy = "currency")
     private Set<Asset> assets;
 
+    @OneToMany(mappedBy = "currency")
+    private Set<CurrencyPrice> currencyPrices;
+
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
         Currency currency = (Currency) o;
-        return Double.compare(currency.value, value) == 0 && maximumSupply == currency.maximumSupply && Objects.equals(id, currency.id) && Objects.equals(name, currency.name) && Objects.equals(ticker, currency.ticker) && Objects.equals(contractAddress, currency.contractAddress) && Objects.equals(circulatingSupply, currency.circulatingSupply);
+        return maximumSupply == currency.maximumSupply && Objects.equals(id, currency.id) && Objects.equals(name,
+                                                                                                            currency.name) &&
+               Objects.equals(ticker, currency.ticker) && Objects.equals(contractAddress, currency.contractAddress) &&
+               Objects.equals(circulatingSupply, currency.circulatingSupply);
     }
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, ticker, value, contractAddress, maximumSupply, circulatingSupply);
+        return Objects.hash(id, name, ticker, contractAddress, maximumSupply, circulatingSupply);
     }
+
 }
