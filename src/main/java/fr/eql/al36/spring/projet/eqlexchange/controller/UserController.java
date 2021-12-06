@@ -22,7 +22,7 @@ public class UserController {
     public String displayDashboard(Model model){
         User connectedUser = userService.findUserById(4);
         if(connectedUser == null){
-            return "user/non-existant";
+            return "non-existent";
         }
         model.addAttribute("sessionUser", connectedUser);
         return "user/dashboard";
