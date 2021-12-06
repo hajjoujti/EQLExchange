@@ -13,6 +13,8 @@ public interface AssetRepository extends CrudRepository<Asset, Integer> {
 
     List<Asset> getAssetsByUserOrderByBalanceDesc(User user);
 
-    @Query("SELECT a from Asset a WHERE a.user = :user AND a.currency = :currency")
+    @Query("SELECT a FROM Asset a WHERE a.user = :user AND a.currency = :currency")
     Asset getAssetByUserAndCurrency(@Param("user") User user, @Param("currency") Currency currency);
+
+    List<Asset> getAllByUser(User user);
 }
