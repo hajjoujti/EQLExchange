@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>Wallet Overview</title>
-    <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
+<div layout:fragment="content">
 <h1>My Wallet</h1>
 <h2>hash</h2>
 <table>
@@ -28,5 +30,6 @@
         <td><a href="#" th:href="${'/transfer/' + ${asset.id}}">Transfer</a></td>
     </tr>
 </table>
+</div>
 </body>
 </html>

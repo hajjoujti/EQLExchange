@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
 <head>
     <meta charset="UTF-8">
     <title th:text="Wallet - ${asset.currency.name} details"></title>
 </head>
 <body>
+<div layout:fragment="content">
 <h1 th:text="Your ${asset.currency.name} wallet"></h1>
 <div th:text="${asset.balance} ${asset.currency.ticker}"></div>
 <a href="#" th:href="${'/trade/' + ${asset.currency.ticker} + '/ETH'}">Buy</a>
  | <a href="#" th:href="${'/trade/ETH/' + ${asset.currency.ticker}}">Sell</a>
  | <a href="#" th:href="${'/transfer/' + ${asset.currency.ticker} + '/ETH'}">Transfer</a>
-
+</div>
 </body>
 </html>
