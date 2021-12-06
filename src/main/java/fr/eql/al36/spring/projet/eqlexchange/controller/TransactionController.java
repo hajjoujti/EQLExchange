@@ -19,11 +19,11 @@ public class TransactionController {
     }
 
 
-    @GetMapping("transaction/show-all")
+    @GetMapping("wallet/history")
     public String displayWallet(Model model, HttpSession session) {
         User connectedUser = (User) session.getAttribute("sessionUser");
         model.addAttribute("transactions", transactionService.getTransactionsDoneByUser(connectedUser));
-        return "transaction/show-all";
+        return "wallet/history";
     }
 
 }
