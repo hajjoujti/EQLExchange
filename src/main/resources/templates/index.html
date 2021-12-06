@@ -1,14 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Homepage</title>
+    <title>E-Xchange</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/index.css" />
 </head>
 <body>
-<div layout:fragment="content">
-    Index page content
+<div class="preloader">
+    <div class="preloader-inner">
+        <div class="preloader-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
 </div>
+
+<header class="header navbar-area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="nav-inner">
+                    <!-- Start Navbar -->
+                    <nav class="navbar navbar-expand-lg" style="margin-top: 5px;">
+                        <a class="navbar-brand" href="index.html">
+                            <h2 style="color: white;">E-Xchange</h2>
+                        </a>
+                        <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="toggler-icon"></span>
+                            <span class="toggler-icon"></span>
+                            <span class="toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+
+                        </div> <!-- navbar collapse -->
+                        <div class="button">
+                            <a href="signup.html" class="btn">Connect</a>
+                        </div>
+                    </nav>
+                    <!-- End Navbar -->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="hero-area">
+    <img class="hero-shape" th:src="@{/img/hero-shape.svg}" />
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-12 col-12">
+                <div class="hero-content">
+                    <h4 class="wow fadeInUp" data-wow-delay=".2s">Start Envesting & Earn Money</h4>
+                    <h1 class="wow fadeInUp" data-wow-delay=".4s">Say Hello
+                        to <br>E-coin
+                        <span>
+                                <img class="text-shape" th:src="@{/img/text-shape.svg}" />
+                                money.
+                            </span>
+                    </h1>
+                    <p class="wow fadeInUp" data-wow-delay=".6s">Invest your spare change in Ecoin and save
+                        with<br> crypto to earn interest in real time.
+                    </p>
+                    <div class="button wow fadeInUp" data-wow-delay=".8s">
+                        <a href="about-us.html" class="btn ">Sign in</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 col-12">
+                <div class="hero-image">
+
+                    <img class="main-image" th:src="@{/img/home2-bg.png}" />
+                    <img class="h2-move-1" th:src="@{/img/h2-bit-l.png}" />
+                    <img class="h2-move-2" th:src="@{/img/h2-bit-m.png}" />
+                    <img class="h2-move-3" th:src="@{/img/h2-bit-s.png}" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/js/index.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </body>
 </html>

@@ -3,12 +3,11 @@
                 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">EQLExchange</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">EQLExchange</title>
 </head>
 <body>
-<div layout:fragment="header"></div>
-<div layout:fragment="content"></div>
-<div layout:fragment="footer"></div>
+<div layout:insert="header"></div>
+<div layout:insert="aside"></div>
+<div layout:insert="footer"></div>
 </body>
 </html>
