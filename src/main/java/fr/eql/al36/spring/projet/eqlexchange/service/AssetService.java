@@ -11,8 +11,18 @@ import java.util.List;
 @Service
 public class AssetService {
 
-    private AssetRepository assetRepository;
-    private CurrencyService currencyService;
+    private final AssetRepository assetRepository;
+
+    private final CurrencyService currencyService;
+
+
+    public AssetService(AssetRepository assetRepository,
+                        CurrencyService currencyService) {
+        this.assetRepository = assetRepository;
+        this.currencyService = currencyService;
+    }
+
+
 
     public void creditFromSourceAsset(Asset targetAsset, Asset sourceAsset, double amount) {
         if (targetAsset.getCurrency() == sourceAsset.getCurrency() && sourceAsset.getBalance() >= amount) {
@@ -22,7 +32,12 @@ public class AssetService {
     }
 
     public List<Asset> getUserWallet(User user) {
-        return assetRepository.getAssetsByUserOrderByBalanceDesc(user);
+        List<Asset> assets = assetRepository.getAssetsByUserOrderByBalanceDesc(user);
+        System.out.println("userrrrr" + user.getUsername());
+        for(Asset asset : assets) {
+            System.out.println("assettttt" + asset.getBalance());
+        }
+        return assets;
     }
 
     public Asset getByUserAndCurrency(User user, Currency currency) {

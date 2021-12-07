@@ -3,6 +3,7 @@ package fr.eql.al36.spring.projet.eqlexchange.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class Currency {
     private Set<Asset> assets;
 
     @OneToMany(mappedBy = "currency")
-    private Set<CurrencyPrice> currencyPrices;
+    private List<CurrencyPrice> currencyPrices;
 
 
     @Override
