@@ -10,56 +10,55 @@
 <body>
 <div layout:fragment="content">
     <div class="coin-container">
-        <div id="content">
-                <div class="ecoin">
-                    <div>
-                        <img class="currency-move" th:src="@{'/img/' + ${currency.ticker.toLowerCase()} +'.png'}"/>
-                    </div>
 
-                    <h1 th:text="${currency.name.toUpperCase()}" class="mb-4"></h1>
-                    <div>
-                        <h2 th:text="${currency.value} + ' $'" class="mb-4"></h2>
-                    </div>
-                    <div class="ecoin-exchange">
-                        <div class="ecoin-buy">
-                            <button type="button" class="btn-buy">Buy</button>
-                        </div>
-                        <div class="ecoin-sell">
-                            <button type="button" class="btn-sell">Sell</button>
-                        </div>
-                    </div>
+        <div class="ecoin">
+            <div>
+                <img class="currency-move" th:src="@{'/img/' + ${currency.ticker.toLowerCase()} +'.png'}"/>
+            </div>
+
+            <h1 th:text="${currency.name.toUpperCase()}" class="mb-4"></h1>
+            <div>
+                <h2 th:text="${currency.value} + ' $'" class="mb-4"></h2>
+            </div>
+            <div class="ecoin-exchange">
+                <div class="ecoin-buy">
+                    <button type="button" class="btn-buy">Buy</button>
                 </div>
-
-                <canvas id="myChart" class="chart-currency"></canvas>
-
-                <table class="table table-dark">
-                    <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Action</th>
-                        <th th:text="'Price ' + ${currency.name}" scope="col"></th>
-                        <th th:text="'Amount ' + ${currency.name}" scope="col"></th>
-                        <th scope="col">Total USD</th>
-                        <th scope="col">Txn Hash</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="transaction : ${transactions}">
-                        <th scope="row" th:text="${transaction.date.toString.replace('T', ' ')}"></th>
-                        <td th:if="${transaction.tradeOrder1.currency.equals(currency)}" style="color: red">Sell</td>
-                        <td th:unless="${transaction.tradeOrder1.currency.equals(currency)}" style="color: #28a745">
-                            Buy
-                        </td>
-                        <td th:text="${transaction.tradeOrder1.currency.value}"></td>
-                        <td th:text="${transaction.tradeOrder1.amount}"></td>
-                        <td th:text="${transaction.tradeOrder1.amount * currency.value}"></td>
-                        <th scope="row" th:text="${transaction.txId}"></th>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="ecoin-sell">
+                    <button type="button" class="btn-sell">Sell</button>
+                </div>
             </div>
         </div>
+
+        <canvas id="myChart" class="chart-currency"></canvas>
+
+        <table class="table table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Action</th>
+                <th th:text="'Price ' + ${currency.name}" scope="col"></th>
+                <th th:text="'Amount ' + ${currency.name}" scope="col"></th>
+                <th scope="col">Total USD</th>
+                <th scope="col">Txn Hash</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <th scope="row" th:text="${transaction.date.toString.replace('T', ' ')}"></th>
+                <td th:if="${transaction.tradeOrder1.currency.equals(currency)}" style="color: red">Sell</td>
+                <td th:unless="${transaction.tradeOrder1.currency.equals(currency)}" style="color: #28a745">
+                    Buy
+                </td>
+                <td th:text="${transaction.tradeOrder1.currency.value}"></td>
+                <td th:text="${transaction.tradeOrder1.amount}"></td>
+                <td th:text="${transaction.tradeOrder1.amount * currency.value}"></td>
+                <th scope="row" th:text="${transaction.txId}"></th>
+            </tr>
+            </tbody>
+        </table>
     </div>
+</div>
 </div>
 </div>
 </body>
