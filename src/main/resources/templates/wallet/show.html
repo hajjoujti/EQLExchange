@@ -14,27 +14,34 @@
 
             <h1>Wallet</h1>
             <h2 th:text="${user.walletAddress.substring(0, 8) + '...' + user.walletAddress.substring((user.walletAddress.length() - 5), (user.walletAddress.length() - 1))  }"></h2>
-            <h2 th:text="${#numbers.formatDecimal(user.totalAssetsValue(), 1, 2)} + '$'"></h2>
-            <table>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr th:each="asset : ${assets}">
-                    <td th:text="${asset.currency.ticker}"></td>
-                    <td th:text="${#numbers.formatDecimal(asset.balance, 1, 4)}"></td>
-                    <td th:text="${#numbers.formatDecimal((asset.balance * asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price), 1, 4)}"></td>
-                    <td><a href="#" th:href="@{'/wallet/' + ${asset.id}}">Details</a></td>
-                    <td><a href="#" th:href="@{'/trade/ETH' + ${asset.currency.id}}">Sell</a></td>
-                    <td><a href="#" th:href="@{'/trade/' + ${asset.currency.id} + '/ETH'}">Buy</a></td>
-                    <td><a href="#" th:href="@{'/transfer/' + ${asset.id}}">Transfer</a></td>
-                </tr>
-            </table>
+            <h2 th:text="${#numbers.formatDecimal(user.totalAssetsValue(assets), 1, 2)} + '$'"></h2>
+
+
+            <div class="container-assets">
+                <div class="assets-container" th:each="asset : ${assets}">
+
+                    <div>
+                        <img class="asset-logo" th:src="@{'/img/' + ${asset.currency.ticker.toLowerCase()} +'.png'}"/>
+                    </div>
+
+                    <div class="asset-container">
+                        <div>
+                            <h5 class="asset-balance" th:if="${asset.balance != 0} "
+                                th:text="${#numbers.formatDecimal(asset.balance, 1, 4) + ' ' + asset.currency.ticker }"></h5>
+                            <h5 class="asset-balance" th:if="${asset.balance == 0}"
+                                th:text="${'0 ' + asset.currency.ticker }"></h5>
+                        </div>
+                        <div>
+                        <span class="asset-value"
+                              th:text="${'= ' + #numbers.formatDecimal((asset.balance * asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price), 1, 2) + ' $'}"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="info-icon" href="#" th:href="@{'/wallet/' + ${asset.id}}"><i class="fa fa-solid fa-info"></i></a>
+                    </div>
+                    <hr class="my-4">
+                </div>
+            </div>
 
         </div>
     </div>
