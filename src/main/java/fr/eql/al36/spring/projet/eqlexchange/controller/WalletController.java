@@ -45,9 +45,4 @@ public class WalletController {
         model.addAttribute("asset", assetRepository.findById(Integer.parseInt(id)).get());
         return "wallet/details";
     }
-
-    @GetMapping("wallet/transactions")
-    public String displayTransactions(Model model, HttpSession session) {
-        return "wallet/history";
-    }
 }
