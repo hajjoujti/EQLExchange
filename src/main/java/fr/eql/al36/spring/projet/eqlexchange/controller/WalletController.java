@@ -38,6 +38,7 @@ public class WalletController {
     @GetMapping("wallet")
     public String displayWallet(Model model, HttpSession session) {
         User connectedUser = (User) session.getAttribute("sessionUser");
+        model.addAttribute("user", connectedUser);
         model.addAttribute("assets", assetService.getUserWallet(connectedUser));
         return "wallet/show";
     }
