@@ -5,31 +5,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Wallet Overview</title>
+    <link rel="stylesheet" href="/css/wallet.css">
 </head>
 <body>
 <div layout:fragment="content">
-<h1>My Wallet</h1>
-<h2>hash</h2>
-<table>
-    <tr>
-        <th>Currency</th>
-        <th>Amount</th>
-        <th>Value ($)</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
-    <tr th:each="asset : ${assets}">
-        <td th:text="${asset.currency.ticker}"></td>
-        <td th:text="${asset.balance}"></td>
-        <td th:text="${asset.balance * asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></td>
-        <td><a href="#" th:href="@{'/wallet/' + ${asset.id}}">Details</a></td>
-        <td><a href="#" th:href="@{'/trade/5/' + ${asset.currency.id}}">Sell</a></td>
-        <td><a href="#" th:href="@{'/trade/' + ${asset.currency.id} + '/5'}">Buy</a></td>
-        <td><a href="#" th:href="@{'/transfer/' + ${asset.id}}">Transfer</a></td>
-    </tr>
-</table>
+    <div class="wallet-container">
+        <div class="ecoin">
+
+            <h1>Wallet</h1>
+            <h2 th:text="${user.walletAddress.substring(0, 8) + '...' + user.walletAddress.substring((user.walletAddress.length() - 5), (user.walletAddress.length() - 1))  }"></h2>
+            <h2 th:text="${#numbers.formatDecimal(user.totalAssetsValue(), 1, 2)} + '$'"></h2>
+            <table>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="asset : ${assets}">
+                    <td th:text="${asset.currency.ticker}"></td>
+                    <td th:text="${#numbers.formatDecimal(asset.balance, 1, 4)}"></td>
+                    <td th:text="${#numbers.formatDecimal((asset.balance * asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price), 1, 4)}"></td>
+                    <td><a href="#" th:href="@{'/wallet/' + ${asset.id}}">Details</a></td>
+                    <td><a href="#" th:href="@{'/trade/ETH' + ${asset.currency.id}}">Sell</a></td>
+                    <td><a href="#" th:href="@{'/trade/' + ${asset.currency.id} + '/ETH'}">Buy</a></td>
+                    <td><a href="#" th:href="@{'/transfer/' + ${asset.id}}">Transfer</a></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
 </div>
 </body>
 </html>
