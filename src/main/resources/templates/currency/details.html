@@ -18,7 +18,7 @@
 
             <h1 th:text="${currency.name.toUpperCase()}" class="mb-4"></h1>
             <div>
-                <h2 th:text="${currency.value} + ' $'" class="mb-4"></h2>
+                <h2 th:text="${currency.currencyPrices.get(currency.currencyPrices.size() - 1).price} + ' $'" class="mb-4"></h2>
             </div>
             <div class="ecoin-exchange">
                 <div class="ecoin-buy">
@@ -50,9 +50,9 @@
                 <td th:unless="${transaction.tradeOrder1.currency.equals(currency)}" style="color: #28a745">
                     Buy
                 </td>
-                <td th:text="${transaction.tradeOrder1.currency.value}"></td>
+                <td th:text="${transaction.tradeOrder1.currency.currencyPrices.get(currency.currencyPrices.size() - 1).price}"></td>
                 <td th:text="${transaction.tradeOrder1.amount}"></td>
-                <td th:text="${transaction.tradeOrder1.amount * currency.value}"></td>
+                <td th:text="${transaction.tradeOrder1.amount * (currency.currencyPrices.get(currency.currencyPrices.size() - 1).price)     }"></td>
                 <th scope="row" th:text="${transaction.txId}"></th>
             </tr>
             </tbody>
