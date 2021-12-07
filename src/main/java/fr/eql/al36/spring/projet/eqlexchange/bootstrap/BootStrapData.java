@@ -95,24 +95,32 @@ public class BootStrapData implements CommandLineRunner {
                 fiat).circulatingSupply("80000000000").build());
 
         ////////////////////////////////
-        // CURRENCIES
+        // CURRENCIES PRICES
         ////////////////////////////////
 
         CurrencyPrice bitcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin)
-                                                                          .price(47128.33).build());
+                                                                          .price(47128.33).dateTime(LocalDateTime.now())
+                                                                          .build());
         CurrencyPrice ethereumPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(ethereum)
-                                                                           .price(3922.09).build());
+                                                                           .price(3922.09).dateTime(LocalDateTime.now())
+                                                                           .build());
         CurrencyPrice binanceCoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(binanceCoin)
-                                                                              .price(544.18).build());
+                                                                              .price(544.18)
+                                                                              .dateTime(LocalDateTime.now()).build());
         CurrencyPrice tetherPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(tether).price(1.0)
+                                                                         .dateTime(LocalDateTime.now())
                                                                          .build());
         CurrencyPrice eqlcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(eqlcoin).price(.5)
+                                                                          .dateTime(LocalDateTime.now())
                                                                           .build());
         CurrencyPrice dollarPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(dollar).price(1.0)
+                                                                         .dateTime(LocalDateTime.now())
                                                                          .build());
         CurrencyPrice euroPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(euro).price(1.13)
+                                                                       .dateTime(LocalDateTime.now())
                                                                        .build());
         CurrencyPrice poundPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(pound).price(1.32)
+                                                                        .dateTime(LocalDateTime.now())
                                                                         .build());
 
         ////////////////////////////////
@@ -137,7 +145,7 @@ public class BootStrapData implements CommandLineRunner {
         User robert = userRepository.save(User.builder().firstName("Robert").lastName("Pushard").username(
                         "pusher_bobby").dateOfBirth(LocalDate.of(1956, 11, 8)).email("pouchard11@numericable.fr").password(
                         "jesusmarietf1").walletAddress(
-                                "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D7")
+                        "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D7")
                                                   .build());
 
         ////////////////////////////////
@@ -313,7 +321,7 @@ public class BootStrapData implements CommandLineRunner {
 
         Transaction transaction1 = transactionRepository.save(Transaction.builder().date(
                         LocalDateTime.of(2021, 6, 3, 10, 2, 1)).remainingAmount(0).txId(
-                                "tx_c4ca4238a0b923820dcc509a6f75849b")
+                        "tx_c4ca4238a0b923820dcc509a6f75849b")
                                                                       .tradeOrder1(to2).tradeOrder2(to5).build());
 
 
