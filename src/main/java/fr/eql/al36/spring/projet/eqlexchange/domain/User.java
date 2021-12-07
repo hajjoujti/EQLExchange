@@ -39,4 +39,12 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, username, dateOfBirth, email, password, walletAddress);
     }
+
+    public double totalAssetsValue() {
+        double totalValue = 0;
+        for (Asset asset : this.assets) {
+            totalValue += asset.getBalance() * asset.getCurrency().getValue();
+        }
+        return totalValue;
+    }
 }
