@@ -12,11 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class CurrencyPrice {
 
@@ -25,6 +28,8 @@ public class CurrencyPrice {
     private Integer id;
 
     private double price;
+
+    private LocalDateTime dateTime;
 
     @ManyToOne
     @JoinColumn(name = "currency_id")
@@ -36,13 +41,14 @@ public class CurrencyPrice {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         CurrencyPrice that = (CurrencyPrice) o;
-        return Objects.equals(id, that.id) && Objects.equals(price, that.price);
+        return Double.compare(that.price, price) == 0 && Objects.equals(id, that.id) &&
+               Objects.equals(dateTime, that.dateTime);
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price);
+        return Objects.hash(id, price, dateTime);
     }
 
 }
