@@ -8,19 +8,19 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1 th:text="${'Buy ' + tradeOrder.currency.ticker}"></h1>
+    <h1 th:text="${'Buy ' + tradeOrder.currencyToBuy.ticker}"></h1>
 
 <div>
     PRICE CHART
 </div>
     <div>
         <ul>
-            <li th:text="${'Your ' + tradeOrder.currency.ticker + 'balance: ' + 'xxx' + tradeOrder.currency.ticker}"></li>
+            <li th:text="${'Your ' + tradeOrder.currencyToBuy.ticker + 'balance: ' + 'xxx' + tradeOrder.currencyToBuy.ticker}"></li>
         </ul>
         <form th:object="${tradeOrder}" method="post" th:action="@{'/trade/place'}">
-        <input type="hidden" th:value="${tradeOrder.currency.id}" name="idCurrencyToBuy" />
+        <input type="hidden" th:value="${tradeOrder.currencyToBuy.id}" name="idCurrencyToBuy" />
 
-            Buy <b th:text="${tradeOrder.currency.ticker}"></b> with
+            Buy <b th:text="${tradeOrder.currencyToBuy.ticker}"></b> with
 
             <select th:field="*{currencyToSell}">
                 <option th:each="i : ${currenciesToSell}" th:text="${i.ticker}" th:value="${i.id}"></option>
@@ -29,13 +29,13 @@
 
             <div>
                 <label th:text="${'Amount of ' + currencyToSell.ticker} + ':'"></label>
-                <input type="text" th:field="*{amount}" />
+                <input type="text" th:field="*{amountToBuy}" />
             </div>
             <div>
-                <label th:text="${'Will get you in ' + tradeOrder.currency.ticker} + ':'"></label>
+                <label th:text="${'Will get you in ' + tradeOrder.currencyToBuy.ticker} + ':'"></label>
                 <label th:name="amountToBuy" th:value="xxx" th:onchange=""></label>
             </div>
-            <button type="submit" th:text="${'Buy XXX ' + tradeOrder.currency.ticker + ' with ' + 'XXX' + ' ' + currencyToSell.ticker}"></button>
+            <button type="submit" th:text="${'Buy XXX ' + tradeOrder.currencyToBuy.ticker + ' with ' + 'XXX' + ' ' + currencyToSell.ticker}"></button>
     </form>
     </div>
 </div>
