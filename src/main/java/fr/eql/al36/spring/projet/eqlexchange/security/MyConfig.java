@@ -26,10 +26,6 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
                              "/currency/**",
                              "/transaction/**",
                              "/wallet/**").hasRole("USER")
-                .antMatchers("/user/**",
-                             "/currency/**",
-                             "/transaction/**",
-                             "/wallet/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().
                 formLogin().defaultSuccessUrl("/user/dashboard")
