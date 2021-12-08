@@ -2,6 +2,7 @@ package fr.eql.al36.spring.projet.eqlexchange.controller;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
 import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
+import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
 import fr.eql.al36.spring.projet.eqlexchange.domain.User;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyRepository;
@@ -53,7 +54,7 @@ public class TradeOrderController {
         model.addAttribute("currenciesToSell",currencyService.getAllExceptOneWithId(currencyToBuy.getId()));
 
         TradeOrder newTradeOrder = new TradeOrder();
-        newTradeOrder.setCurrency(currencyToBuy);
+        newTradeOrder.setCurrencyToBuy(currencyToBuy);
 
         model.addAttribute("tradeOrder", newTradeOrder);
         return "transaction/trade";
@@ -64,13 +65,12 @@ public class TradeOrderController {
         User connectedUser = (User) session.getAttribute("sessionUser");
 
         Currency currencyToBuy = currencyService.findCurrencyById(idCurrencyToBuy);
-        tradeOrder.setCurrency(currencyToBuy);
-        System.out.println("PostMapping: currency to buy: " + tradeOrder.getCurrency().getTicker());
+        tradeOrder.setCurrencyToBuy(currencyToBuy);
+        System.out.println("PostMapping: currency to buy: " + tradeOrder.getCurrencyToBuy().getTicker());
 
         System.out.println("PostMapping: currency to sell (model):" + tradeOrder.getCurrencyToSell().getTicker());
         Currency currencyToSell = tradeOrder.getCurrencyToSell();
 
-        tradeOrder.setAsset(assetService.getByUserAndCurrency(connectedUser, currencyToSell));
         tradeOrder.setCreationDate(LocalDateTime.now());
         tradeOrderService.place(tradeOrder, connectedUser);
         List<TradeOrder> matchingTradeOrders = tradeOrderService.match(tradeOrder);
@@ -83,7 +83,7 @@ public class TradeOrderController {
 
             TradeOrder selectedTradeOrder = tradeOrderService.selectBestAmong(tradeOrder, matchingTradeOrders);
             System.out.println("selected: " + selectedTradeOrder.getId());
-            transactionService.execute(tradeOrder, selectedTradeOrder);
+            Transaction transaction = transactionService.execute(tradeOrder, selectedTradeOrder);
         }
 
         return trade(model, currencyToBuy.getId().toString(), session);
