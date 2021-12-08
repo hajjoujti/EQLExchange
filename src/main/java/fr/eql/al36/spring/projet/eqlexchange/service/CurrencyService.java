@@ -24,4 +24,8 @@ public class CurrencyService {
         return null;
     }
 
+    public List<Currency> getAllExceptOneWithId(Integer id) {
+        return currencyRepository.getAllExceptOneWithId(id);
+    }
+
 }
