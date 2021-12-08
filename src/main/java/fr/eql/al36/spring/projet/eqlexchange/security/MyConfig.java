@@ -26,11 +26,17 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
                              "/currency/**",
                              "/transaction/**",
                              "/wallet/**").hasRole("USER")
+                .antMatchers("/user/**",
+                             "/currency/**",
+                             "/transaction/**",
+                             "/wallet/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().
                 formLogin().defaultSuccessUrl("/user/dashboard")
                 .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .and()
+                .logout().logoutSuccessUrl("/");
     }
 
 
