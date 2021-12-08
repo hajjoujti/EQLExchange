@@ -37,7 +37,7 @@
                         <span class="asset-contract"
                               th:text="${ '≈ ' + ((asset.balance) * (asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price)) + '$'}"></span>
                     </div>
-                    <button class="buy-btn">Buy</button>
+                    <a href="#" th:href="@{'/trade/buy/' + ${asset.currency.id}}"><button class="buy-btn">Buy</button></a>
                     <button class="sell-btn">Sell</button>
                     <button class="transfert-btn">Transfert</button>
                 </div>
