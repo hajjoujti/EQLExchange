@@ -21,4 +21,11 @@ public class UserService {
         return null;
     }
 
+    public User findUserByEmail(String email) {
+        if(userRepository.findByEmail(email).isPresent()){
+            return userRepository.findByEmail(email).get();
+        }
+        return null;
+    }
+
 }
