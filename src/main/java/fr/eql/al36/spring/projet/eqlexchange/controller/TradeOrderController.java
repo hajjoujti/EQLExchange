@@ -6,6 +6,8 @@ import fr.eql.al36.spring.projet.eqlexchange.domain.User;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
+import fr.eql.al36.spring.projet.eqlexchange.service.AssetService;
+import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyService;
 import fr.eql.al36.spring.projet.eqlexchange.service.TradeOrderService;
 import fr.eql.al36.spring.projet.eqlexchange.service.TransactionService;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -21,41 +24,68 @@ public class TradeOrderController {
 
     private final TradeOrderRepository tradeOrderRepository;
     private final CurrencyRepository currencyRepository;
+    private final CurrencyService currencyService;
     private final TradeOrderService tradeOrderService;
     private final TransactionService transactionService;
     private final AssetRepository assetRepository;
+    private final AssetService assetService;
 
     public TradeOrderController(TradeOrderRepository tradeOrderRepository,
                                 CurrencyRepository currencyRepository,
-                                TradeOrderService tradeOrderService, TransactionService transactionService, AssetRepository assetRepository) {
+                                CurrencyService currencyService, TradeOrderService tradeOrderService, TransactionService transactionService, AssetRepository assetRepository, AssetService assetService) {
 
         this.tradeOrderRepository = tradeOrderRepository;
         this.currencyRepository = currencyRepository;
+        this.currencyService = currencyService;
         this.tradeOrderService = tradeOrderService;
         this.transactionService = transactionService;
         this.assetRepository = assetRepository;
+        this.assetService = assetService;
     }
 
-    @GetMapping("trade/{id1}/{id2}")
-    public String trade(Model model, @PathVariable String id1, @PathVariable String id2, HttpSession session) {
+    @GetMapping("trade/buy/{id1}")
+    public String trade(Model model, @PathVariable String id1, HttpSession session) {
         User connectedUser = (User) session.getAttribute("sessionUser");
         Currency currencyToBuy = currencyRepository.findById(Integer.parseInt(id1)).get();
-        Currency currencyToSell = currencyRepository.findById(Integer.parseInt(id2)).get();
-        model.addAttribute("targetAsset",assetRepository.getAssetByUserAndCurrency(connectedUser, currencyToBuy));
-        model.addAttribute("sourceAsset",assetRepository.getAssetByUserAndCurrency(connectedUser, currencyToSell));
-        model.addAttribute("currencyToBuy",currencyRepository.findById(Integer.parseInt(id1)).get());
-        model.addAttribute("currencyToSell",currencyRepository.findById(Integer.parseInt(id2)).get());
-        model.addAttribute("tradeOrder", new TradeOrder());
+
+        System.out.println("currency to buy: " + currencyToBuy.getTicker());
+        model.addAttribute("currencyToSell",currencyService.findCurrencyById(3));
+        model.addAttribute("currenciesToSell",currencyService.getAllExceptOneWithId(currencyToBuy.getId()));
+
+        TradeOrder newTradeOrder = new TradeOrder();
+        newTradeOrder.setCurrency(currencyToBuy);
+
+        model.addAttribute("tradeOrder", newTradeOrder);
         return "transaction/trade";
     }
 
     @PostMapping("trade/place")
-    public String placeTradeOrder(@ModelAttribute TradeOrder tradeOrder, HttpSession session) {
+    public String placeTradeOrder(@ModelAttribute TradeOrder tradeOrder, @RequestParam("idCurrencyToSell") Integer idCurrencyToSell, @RequestParam("idCurrencyToBuy") Integer idCurrencyToBuy, Model model, HttpSession session) {
         User connectedUser = (User) session.getAttribute("sessionUser");
+
+        Currency currencyToBuy = currencyService.findCurrencyById(idCurrencyToBuy);
+        tradeOrder.setCurrency(currencyToBuy);
+        System.out.println("PostMapping: currency to buy: " + tradeOrder.getCurrency().getTicker());
+
+        System.out.println("PostMapping: currency to sell (model):" + tradeOrder.getCurrencyToSell().getTicker());
+        Currency currencyToSell = tradeOrder.getCurrencyToSell();
+
+        tradeOrder.setAsset(assetService.getByUserAndCurrency(connectedUser, currencyToSell));
+        tradeOrder.setCreationDate(LocalDateTime.now());
         tradeOrderService.place(tradeOrder, connectedUser);
         List<TradeOrder> matchingTradeOrders = tradeOrderService.match(tradeOrder);
-        TradeOrder selectedTradeOrder = tradeOrderService.selectBestAmong(tradeOrder, matchingTradeOrders);
-        transactionService.execute(tradeOrder, selectedTradeOrder);
-        return "redirect:/transaction/trade/" + tradeOrder.getAsset().getCurrency().getTicker() + "/" + tradeOrder.getCurrency().getTicker();
+
+        if (matchingTradeOrders.size() > 0) {
+            System.out.println("Matches:");
+            for (TradeOrder matchingTradeOrder : matchingTradeOrders) {
+                System.out.println("maaatch: " + matchingTradeOrder.getId());
+            }
+
+            TradeOrder selectedTradeOrder = tradeOrderService.selectBestAmong(tradeOrder, matchingTradeOrders);
+            System.out.println("selected: " + selectedTradeOrder.getId());
+            transactionService.execute(tradeOrder, selectedTradeOrder);
+        }
+
+        return trade(model, currencyToBuy.getId().toString(), session);
     }
 }

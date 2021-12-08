@@ -8,28 +8,34 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1 th:text="${'Buy ' + currencyToBuy.ticker + ' for ' + currencyToSell.ticker}"></h1>
+    <h1 th:text="${'Buy ' + tradeOrder.currency.ticker}"></h1>
+
 <div>
     PRICE CHART
 </div>
     <div>
         <ul>
-            <li th:text="${'Your ' + currencyToSell.ticker + ' balance: ' + sourceAsset.balance + ' ' + currencyToSell.ticker}"></li>
-            <li th:text="${'Your ' + currencyToBuy.ticker + ' balance: ' + targetAsset.balance + ' ' + currencyToBuy.ticker}"></li>
+            <li th:text="${'Your ' + tradeOrder.currency.ticker + 'balance: ' + 'xxx' + tradeOrder.currency.ticker}"></li>
         </ul>
         <form th:object="${tradeOrder}" method="post" th:action="@{'/trade/place'}">
-            <input type="hidden" th:field="*{id}" />
-            <input type="hidden" th:field="*{asset}" />
-            <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:value="${tradeOrder.currency.id}" name="idCurrencyToBuy" />
+
+            Buy <b th:text="${tradeOrder.currency.ticker}"></b> with
+
+            <select th:field="*{currencyToSell}">
+                <option th:each="i : ${currenciesToSell}" th:text="${i.ticker}" th:value="${i.id}"></option>
+            </select>
+            <input type="hidden" th:value="${currencyToSell.id}" name="idCurrencyToSell" />
+
             <div>
                 <label th:text="${'Amount of ' + currencyToSell.ticker} + ':'"></label>
                 <input type="text" th:field="*{amount}" />
             </div>
             <div>
-                <label th:text="${'Will get you in ' + currencyToBuy.ticker} + ':'"></label>
-                <input type="text" />
+                <label th:text="${'Will get you in ' + tradeOrder.currency.ticker} + ':'"></label>
+                <label th:name="amountToBuy" th:value="xxx" th:onchange=""></label>
             </div>
-            <button type="submit" th:text="${'Buy XXX ' + currencyToBuy.ticker + ' with ' + 'XXX' + ' ' + currencyToSell.ticker}"></button>
+            <button type="submit" th:text="${'Buy XXX ' + tradeOrder.currency.ticker + ' with ' + 'XXX' + ' ' + currencyToSell.ticker}"></button>
     </form>
     </div>
 </div>

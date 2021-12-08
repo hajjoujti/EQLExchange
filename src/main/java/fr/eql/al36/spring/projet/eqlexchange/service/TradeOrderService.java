@@ -8,11 +8,13 @@ import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class TradeOrderService {
 
     private final TradeOrderRepository tradeOrderRepository;
