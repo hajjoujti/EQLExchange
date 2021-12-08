@@ -12,6 +12,7 @@ import fr.eql.al36.spring.projet.eqlexchange.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,6 +40,13 @@ public class TransactionService {
 
     public List<Transaction> getTransactionsDoneByUser(User user) {
         List<Asset> assets = assetRepository.getAllByUser(user);
+        List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
+        return transactionRepository.findAllByTradeOrders(tradeOrders);
+    }
+
+    public List<Transaction> getTransactionsByAsset(Asset asset) {
+        List<Asset> assets = new ArrayList<>();
+        assets.add(asset);
         List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
         return transactionRepository.findAllByTradeOrders(tradeOrders);
     }
