@@ -26,8 +26,12 @@ public class Currency {
     @JoinColumn(name = "currency_type_id")
     private CurrencyType currencyType;
 
-    @OneToMany(mappedBy = "currency")
-    private Set<TradeOrder> tradeOrders;
+    @OneToMany(mappedBy = "currencyToBuy")
+    private Set<TradeOrder> buyTradeOrders;
+
+        @OneToMany(mappedBy = "currencyToSell")
+    private Set<TradeOrder> sellTradeOrders;
+
 
     @OneToMany(mappedBy = "currency")
     private Set<Asset> assets;
