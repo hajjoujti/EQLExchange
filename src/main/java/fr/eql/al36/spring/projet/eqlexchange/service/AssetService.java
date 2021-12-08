@@ -28,6 +28,8 @@ public class AssetService {
         if (targetAsset.getCurrency() == sourceAsset.getCurrency() && sourceAsset.getBalance() >= amount) {
             sourceAsset.setBalance(sourceAsset.getBalance() - amount);
             targetAsset.setBalance(targetAsset.getBalance() + amount);
+            assetRepository.save(sourceAsset);
+            assetRepository.save(targetAsset);
         }
     }
 
