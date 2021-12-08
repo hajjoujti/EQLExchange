@@ -33,7 +33,7 @@ public class CurrencyController {
         }
         model.addAttribute("currency", currency);
         model.addAttribute("connectedUser", connectedUser);
-        model.addAttribute("transactions", transactionService.getTransactionsDoneOnCurrency(currency));
+        //model.addAttribute("transactions", transactionService.getTransactionsDoneOnCurrency(currency));
         return "currency/details";
     }
 

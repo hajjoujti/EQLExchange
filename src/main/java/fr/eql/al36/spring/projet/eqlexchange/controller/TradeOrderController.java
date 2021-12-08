@@ -68,11 +68,15 @@ public class TradeOrderController {
         tradeOrder.setCurrencyToBuy(currencyToBuy);
         System.out.println("PostMapping: currency to buy: " + tradeOrder.getCurrencyToBuy().getTicker());
 
-        System.out.println("PostMapping: currency to sell (model):" + tradeOrder.getCurrencyToSell().getTicker());
+        System.out.println("PostMapping: currency to sell :" + tradeOrder.getCurrencyToSell().getTicker());
+        System.out.println("PostMapping: amount to sell :" + tradeOrder.getAmountToSell());
         Currency currencyToSell = tradeOrder.getCurrencyToSell();
 
+        tradeOrder.setUser(connectedUser);
+        tradeOrder.setAmountToBuy(currencyService.getCurrencyAmountIn(currencyToBuy,currencyToSell, tradeOrder.getAmountToSell()));
+        System.out.println("PostMapping: amount to buy :" + tradeOrder.getAmountToBuy());
         tradeOrder.setCreationDate(LocalDateTime.now());
-        tradeOrderService.place(tradeOrder, connectedUser);
+        tradeOrderService.place(tradeOrder);
         List<TradeOrder> matchingTradeOrders = tradeOrderService.match(tradeOrder);
 
         if (matchingTradeOrders.size() > 0) {
@@ -83,7 +87,7 @@ public class TradeOrderController {
 
             TradeOrder selectedTradeOrder = tradeOrderService.selectBestAmong(tradeOrder, matchingTradeOrders);
             System.out.println("selected: " + selectedTradeOrder.getId());
-            Transaction transaction = transactionService.execute(tradeOrder, selectedTradeOrder);
+            transactionService.execute(tradeOrder, selectedTradeOrder);
         }
 
         return trade(model, currencyToBuy.getId().toString(), session);

@@ -22,7 +22,7 @@ public class TransactionController {
     @GetMapping("wallet/history")
     public String displayWallet(Model model, HttpSession session) {
         User connectedUser = (User) session.getAttribute("sessionUser");
-        model.addAttribute("transactions", transactionService.getTransactionsDoneByUser(connectedUser));
+        //model.addAttribute("transactions", transactionService.getTransactionsDoneByUser(connectedUser));
         return "wallet/history";
     }
 

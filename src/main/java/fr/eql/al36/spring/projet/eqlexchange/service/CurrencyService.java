@@ -10,10 +10,11 @@ import java.util.List;
 public class CurrencyService {
 
     private final CurrencyRepository currencyRepository;
+    private final CurrencyPriceService currencyPriceService;
 
-
-    public CurrencyService(CurrencyRepository currencyRepository) {
+    public CurrencyService(CurrencyRepository currencyRepository, CurrencyPriceService currencyPriceService) {
         this.currencyRepository = currencyRepository;
+        this.currencyPriceService = currencyPriceService;
     }
 
 
@@ -28,4 +29,9 @@ public class CurrencyService {
         return currencyRepository.getAllExceptOneWithId(id);
     }
 
+    public double getCurrencyAmountIn(Currency outputCurrency, Currency inputCurrency, double inputAmount) {
+        double outputCurrencyValue = currencyPriceService.getLatestPriceOFCurrency(outputCurrency).getPrice();
+        double inputCurrencyValue = currencyPriceService.getLatestPriceOFCurrency(inputCurrency).getPrice();
+        return inputCurrencyValue * inputAmount / outputCurrencyValue;
+    }
 }

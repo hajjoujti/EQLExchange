@@ -17,12 +17,11 @@ import java.util.List;
 @Transactional
 public class TradeOrderService {
 
+    private final double MAX_SLIPPAGE_RATE = .97;
+
     private final TradeOrderRepository tradeOrderRepository;
     private final CurrencyPriceRepository currencyPriceRepository;
     private final AssetRepository assetRepository;
-
-    private final double MAX_SLIPPAGE_RATE = .97;
-
 
     public TradeOrderService(TradeOrderRepository tradeOrderRepository, CurrencyPriceRepository currencyPriceRepository,
                              AssetRepository assetRepository) {
@@ -34,7 +33,7 @@ public class TradeOrderService {
 
     // Returns Trade Order value in reference currency (dollar by design)
     public double getReferenceValue(TradeOrder tradeOrder) {
-        return tradeOrder.getAmount() * currencyPriceRepository.findTopByCurrencyOrderByIdDesc(tradeOrder.getAsset().getCurrency()).getPrice();
+        return tradeOrder.getAmountToBuy() * currencyPriceRepository.findTopByCurrencyOrderByIdDesc(tradeOrder.getCurrencyToBuy()).getPrice();
     }
 
     public boolean haveSameReferenceValue(TradeOrder tradeOrder1, TradeOrder tradeOrder2) {
@@ -71,19 +70,19 @@ public class TradeOrderService {
     }
 
     public List<TradeOrder> match(TradeOrder referenceTradeOrder) {
-        return tradeOrderRepository.findAllMatchingTradeOrders(referenceTradeOrder.getAsset().getCurrency(), referenceTradeOrder.getCurrency());
+        return tradeOrderRepository.findAllMatchingTradeOrders(referenceTradeOrder.getUser(), referenceTradeOrder.getCurrencyToBuy(), referenceTradeOrder.getCurrencyToSell());
     }
 
     public TradeOrder selectBestAmong(TradeOrder referenceTradeOrder, List<TradeOrder> candidateTradeOrders) {
 
-        double referenceValue = referenceTradeOrder.getAmount() * currencyPriceRepository.findTopByCurrencyOrderByIdDesc(referenceTradeOrder.getAsset().getCurrency()).getPrice();
+        double referenceValue = getReferenceValue(referenceTradeOrder);
         List<TradeOrder> topTradeOrders = new ArrayList<>();
         List<TradeOrder> middleTradeOrders = new ArrayList<>();
         List<TradeOrder> bottomTradeOrders = new ArrayList<>();
 
         for (TradeOrder candidateTradeOrder : candidateTradeOrders) {
-            double candidateValue = candidateTradeOrder.getAmount() * currencyPriceRepository.findTopByCurrencyOrderByIdDesc(candidateTradeOrder.getAsset().getCurrency()).getPrice();
-            if(referenceValue / candidateValue >= MAX_SLIPPAGE_RATE && 1 / (candidateValue / referenceValue) <= 1 / MAX_SLIPPAGE_RATE) {
+            double candidateValue = getReferenceValue(candidateTradeOrder);
+            if(referenceValue / candidateValue >= MAX_SLIPPAGE_RATE && candidateValue / referenceValue >= MAX_SLIPPAGE_RATE) {
                 return candidateTradeOrder;
             }
             else if(referenceValue / candidateValue >= .5 && referenceValue / candidateValue <= 2) {
@@ -110,21 +109,9 @@ public class TradeOrderService {
         }
     }
 
-    public void place(TradeOrder tradeOrder, User connectedUser) {
-        if (assetRepository.getAssetByUserAndCurrency(connectedUser,tradeOrder.getCurrency()).getBalance() >= tradeOrder.getAmount()) {
+    public void place(TradeOrder tradeOrder) {
+        if (assetRepository.getAssetByUserAndCurrency(tradeOrder.getUser(),tradeOrder.getCurrencyToBuy()).getBalance() >= tradeOrder.getAmountToBuy()) {
             tradeOrderRepository.save(tradeOrder);
         }
-    }
-    public TradeOrder createFromUnsatisfiedTransaction(Transaction transaction) {
-
-        List<TradeOrder> sortedTradeOrders = getSortedByValue(transaction.getTradeOrder1(), transaction.getTradeOrder2());
-        TradeOrder unsatisfiedTradeOrder = sortedTradeOrders.get(0);
-
-        return tradeOrderRepository.save(TradeOrder.builder()
-                .asset(unsatisfiedTradeOrder.getAsset())
-                .amount(transaction.getRemainingAmount())
-                .currency(unsatisfiedTradeOrder.getCurrency())
-                .creationDate(LocalDateTime.now())
-                .build());
     }
 }

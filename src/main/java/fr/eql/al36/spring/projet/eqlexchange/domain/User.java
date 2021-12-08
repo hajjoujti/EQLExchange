@@ -37,6 +37,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     Set<Asset> assets;
 
+    @OneToMany(mappedBy = "user")
+    List<TradeOrder> tradeOrders;
+
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "user_authority", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {

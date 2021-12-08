@@ -25,7 +25,7 @@ public class AssetService {
 
 
     public void creditFromSourceAsset(Asset targetAsset, Asset sourceAsset, double amount) {
-        if (targetAsset.getCurrency() == sourceAsset.getCurrency() && sourceAsset.getBalance() >= amount) {
+        if (targetAsset.getCurrency().getId() == sourceAsset.getCurrency().getId() && sourceAsset.getBalance() >= amount) {
             sourceAsset.setBalance(sourceAsset.getBalance() - amount);
             targetAsset.setBalance(targetAsset.getBalance() + amount);
             assetRepository.save(sourceAsset);

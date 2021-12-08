@@ -26,7 +26,7 @@ public class TradeOrder {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id")
+    @JoinColumn(name = "currency_to_buy_id")
     private Currency currencyToBuy;
 
     @ManyToOne

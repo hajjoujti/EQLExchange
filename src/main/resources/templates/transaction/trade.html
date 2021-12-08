@@ -20,6 +20,7 @@
         <form th:object="${tradeOrder}" method="post" th:action="@{'/trade/place'}">
         <input type="hidden" th:value="${tradeOrder.currencyToBuy.id}" name="idCurrencyToBuy" />
 
+
             Buy <b th:text="${tradeOrder.currencyToBuy.ticker}"></b> with
 
             <select th:field="*{currencyToSell}">
@@ -29,7 +30,7 @@
 
             <div>
                 <label th:text="${'Amount of ' + currencyToSell.ticker} + ':'"></label>
-                <input type="text" th:field="*{amountToBuy}" />
+                <input type="text" th:field="*{amountToSell}" />
             </div>
             <div>
                 <label th:text="${'Will get you in ' + tradeOrder.currencyToBuy.ticker} + ':'"></label>

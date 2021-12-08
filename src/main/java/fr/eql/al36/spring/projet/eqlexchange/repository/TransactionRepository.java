@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface TransactionRepository extends CrudRepository<Transaction, String> {
 
+    /*
     @Query("SELECT t FROM Transaction t WHERE t.tradeOrder1 IN :tradeOrders OR t.tradeOrder2 IN :tradeOrders")
     List<Transaction> findAllByTradeOrders(@Param("tradeOrders") List<TradeOrder> tradeOrders);
+     */
 
 }

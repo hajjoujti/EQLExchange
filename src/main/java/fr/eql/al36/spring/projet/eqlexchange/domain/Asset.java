@@ -28,9 +28,6 @@ public class Asset {
     @OneToMany(mappedBy = "asset")
     private Set<Payment> payments;
 
-    @OneToMany(mappedBy = "asset")
-    private Set<TradeOrder> tradeOrders;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
