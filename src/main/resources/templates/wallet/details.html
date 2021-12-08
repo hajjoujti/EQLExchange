@@ -5,14 +5,65 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${'Wallet - ' + asset.currency.name + ' details'}"></title>
+    <link rel="stylesheet" href="/css/wallet_details.css">
 </head>
 <body>
 <div layout:fragment="content">
-<h1 th:text="${'Your ' + asset.currency.name + ' wallet'}"></h1>
-<div th:text="${asset.balance} + ' ' + ${asset.currency.ticker}"></div>
-<a href="#" th:href="@{'/trade/' + ${asset.currency.ticker} + '/ETH'}">Buy</a>
- | <a href="#" th:href="@{'/trade/ETH/' + ${asset.currency.ticker}}">Sell</a>
- | <a href="#" th:href="@{'/transfer/' + ${asset.currency.ticker} + '/ETH'}">Transfer</a>
+
+
+    <div class="asset-detail-container">
+
+        <div class="asset-title">
+            <div>
+                <img class="asset-logo" th:src="@{'/img/' + ${asset.currency.ticker.toLowerCase()} +'.png'}"/>
+            </div>
+
+            <div class="asset-description">
+                <div>
+                    <h2 th:text="${asset.currency.ticker.toUpperCase()}" class="asset-detail-ticker"></h2>
+                </div>
+                <div class="asset-description-container">
+                    <span class="asset-detail-name" th:text="${ '(' + asset.currency.name + ')'}"></span>
+                    <p class="asset-contract" th:text="${'Token contract : ' + asset.currency.contractAddress}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-and-detail-container">
+            <div>
+                <div class="btn-container">
+                    <div class="own-container">
+                        <h5 th:text="${asset.balance + ' ' + asset.currency.ticker}"></h5>
+                        <span class="asset-contract"
+                              th:text="${ '≈ ' + ((asset.balance) * (asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price)) + '$'}"></span>
+                    </div>
+                    <button class="buy-btn">Buy</button>
+                    <button class="sell-btn">Sell</button>
+                    <button class="transfert-btn">Transfert</button>
+                </div>
+
+                <div class="currency-detail-container">
+                    <div style="display: flex">
+                        <i class="fa fa-light fa-arrow-trend-up"></i>
+                        <h3 class="price-currency"
+                            th:text="${ '$' + asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></h3>
+                    </div>
+                    <div class="token-infos">
+                        <span class="token-title-info">Total liquidity :</span>
+                        <span class="currency-details"
+                              th:text="${asset.currency.maximumSupply}"></span>
+                        <span class="token-title-info">Cirulating supply :</span>
+                        <span class="currency-details" th:text="${asset.currency.circulatingSupply}"></span>
+                        <span class="token-title-info">Market Cap :</span>
+                        <span class="currency-details"
+                              th:text="${marketcap}"></span>
+                    </div>
+                </div>
+            </div>
+            <canvas id="myChart" class="chart-currency"></canvas>
+        </div>
+
+    </div>
 </div>
 </body>
 </html>

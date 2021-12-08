@@ -92,3 +92,13 @@ a[data-toggle="collapse"] {
     margin-left: 15px;
 }
 
+#content {
+    width: 100%;
+    padding: 0;
+    min-height: 100vh;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    background-color: #0b1217;
+}
+

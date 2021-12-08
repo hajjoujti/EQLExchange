@@ -3,10 +3,13 @@ package fr.eql.al36.spring.projet.eqlexchange.bootstrap;
 import fr.eql.al36.spring.projet.eqlexchange.domain.*;
 import fr.eql.al36.spring.projet.eqlexchange.repository.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class BootStrapData implements CommandLineRunner {
@@ -27,11 +30,16 @@ public class BootStrapData implements CommandLineRunner {
 
     private final UserRepository userRepository;
 
+    private final AuthorityRepository authorityRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
 
     public BootStrapData(AssetRepository assetRepository, CurrencyRepository currencyRepository,
                          CurrencyPriceRepository currencyPriceRepository, CurrencyTypeRepository currencyTypeRepository,
                          TradeOrderRepository tradeOrderRepository, PaymentRepository paymentRepository,
-                         TransactionRepository transactionRepository, UserRepository userRepository) {
+                         TransactionRepository transactionRepository, UserRepository userRepository,
+                         AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
 
         this.assetRepository = assetRepository;
         this.currencyRepository = currencyRepository;
@@ -41,6 +49,8 @@ public class BootStrapData implements CommandLineRunner {
         this.paymentRepository = paymentRepository;
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -98,30 +108,35 @@ public class BootStrapData implements CommandLineRunner {
         // CURRENCIES PRICES
         ////////////////////////////////
 
-        CurrencyPrice bitcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin)
-                                                                          .price(47128.33).dateTime(LocalDateTime.now())
-                                                                          .build());
-        CurrencyPrice ethereumPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(ethereum)
-                                                                           .price(3922.09).dateTime(LocalDateTime.now())
-                                                                           .build());
+        CurrencyPrice bitcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
+                47128.33).dateTime(LocalDateTime.now()).build());
+        CurrencyPrice ethereumPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(ethereum).price(
+                3922.09).dateTime(LocalDateTime.now()).build());
         CurrencyPrice binanceCoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(binanceCoin)
                                                                               .price(544.18)
                                                                               .dateTime(LocalDateTime.now()).build());
         CurrencyPrice tetherPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(tether).price(1.0)
-                                                                         .dateTime(LocalDateTime.now())
-                                                                         .build());
+                                                                         .dateTime(LocalDateTime.now()).build());
         CurrencyPrice eqlcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(eqlcoin).price(.5)
-                                                                          .dateTime(LocalDateTime.now())
-                                                                          .build());
+                                                                          .dateTime(LocalDateTime.now()).build());
         CurrencyPrice dollarPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(dollar).price(1.0)
-                                                                         .dateTime(LocalDateTime.now())
-                                                                         .build());
+                                                                         .dateTime(LocalDateTime.now()).build());
         CurrencyPrice euroPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(euro).price(1.13)
-                                                                       .dateTime(LocalDateTime.now())
-                                                                       .build());
+                                                                       .dateTime(LocalDateTime.now()).build());
         CurrencyPrice poundPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(pound).price(1.32)
-                                                                        .dateTime(LocalDateTime.now())
-                                                                        .build());
+                                                                        .dateTime(LocalDateTime.now()).build());
+
+        ////////////////////////////////
+        // USERS ROLES
+        ////////////////////////////////
+
+        Authority adminRole = authorityRepository.save(Authority.builder().role("ROLE_ADMIN").build());
+        Authority userRole = authorityRepository.save(Authority.builder().role("ROLE_USER").build());
+
+        Set<Authority> adminSet = new HashSet<>();
+        adminSet.add(adminRole);
+        Set<Authority> userSet = new HashSet<>();
+        userSet.add(userRole);
 
         ////////////////////////////////
         // USERS
@@ -129,24 +144,25 @@ public class BootStrapData implements CommandLineRunner {
 
         User owner = userRepository.save(User.builder().firstName("EQL").lastName("Exchange").username("EQLExchange")
                                                  .dateOfBirth(LocalDate.of(1969, 6, 1)).email("bigbux@eqlexchange.io")
-                                                 .password("admin").walletAddress(
-                        "EQL_0F887AC6986B00BBDE4AA91A0B82430A782E93603973AE81A6EC1041789EDA94").build());
+                                                 .password(passwordEncoder.encode("admin")).walletAddress(
+                        "EQL_0F887AC6986B00BBDE4AA91A0B82430A782E93603973AE81A6EC1041789EDA94").authorities(adminSet)
+                                                 .build());
 
         User alain = userRepository.save(User.builder().firstName("Alain").lastName("Musque").username("imsocool420")
                                                  .dateOfBirth(LocalDate.of(1969, 6, 1)).email("alain.musque@yahoo.fr")
-                                                 .password("alain010669").walletAddress(
-                        "EQL_DBF8B58DEC30242DD3E1A64331B9DACDB58CFA0F7742AA47E0984CF4098997AB").build());
+                                                 .password(passwordEncoder.encode("toto")).walletAddress(
+                        "EQL_DBF8B58DEC30242DD3E1A64331B9DACDB58CFA0F7742AA47E0984CF4098997AB").authorities(userSet)
+                                                 .build());
 
         User annesophie = userRepository.save(User.builder().firstName("Anne-Sophie").lastName("Ladouille").username(
                 "douilledu13").dateOfBirth(LocalDate.of(1994, 4, 1)).email("douilledu13@yopmail.com").password(
-                "douilledouilledouille").walletAddress(
-                "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D7").build());
+                passwordEncoder.encode("douilledouilledouille")).walletAddress(
+                "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D7").authorities(userSet).build());
 
         User robert = userRepository.save(User.builder().firstName("Robert").lastName("Pushard").username(
-                        "pusher_bobby").dateOfBirth(LocalDate.of(1956, 11, 8)).email("pouchard11@numericable.fr").password(
-                        "jesusmarietf1").walletAddress(
-                        "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D7")
-                                                  .build());
+                "pusher_bobby").dateOfBirth(LocalDate.of(1956, 11, 8)).email("pouchard11@numericable.fr").password(
+                passwordEncoder.encode("jesusmarietf1")).walletAddress(
+                "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D7").authorities(userSet).build());
 
         ////////////////////////////////
         // ASSETS
@@ -321,7 +337,7 @@ public class BootStrapData implements CommandLineRunner {
 
         Transaction transaction1 = transactionRepository.save(Transaction.builder().date(
                         LocalDateTime.of(2021, 6, 3, 10, 2, 1)).remainingAmount(0).txId(
-                        "tx_c4ca4238a0b923820dcc509a6f75849b")
+                                "tx_c4ca4238a0b923820dcc509a6f75849b")
                                                                       .tradeOrder1(to2).tradeOrder2(to5).build());
 
 
