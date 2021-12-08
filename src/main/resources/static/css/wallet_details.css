@@ -1,0 +1,116 @@
+.asset-detail-container {
+
+    color: white;
+    padding: 100px;
+}
+
+.asset-title {
+    display: flex;
+}
+
+.asset-logo {
+    height: 50px;
+    width: 50px;
+    margin-top: 5px;
+}
+
+.asset-detail-ticker {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 0px !important;
+}
+
+.asset-detail-name {
+    font-size: 1rem;
+}
+
+.asset-description-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.asset-contract {
+    color: #818ea3!important;
+    font-size: 13px;
+    padding: 5px;
+}
+
+.asset-description {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+}
+
+.own-container {
+    display: flex;
+}
+
+.btn-container {
+    display: flex;
+
+}
+
+.btn-container button {
+    padding: 0 12px;
+    font-size: 14px;
+    border-radius: 5%;
+    border: none;
+    margin-left: 5px;
+    color: white;
+}
+
+.buy-btn {
+    background-color: #17c671;
+}
+
+.buy-btn:hover {
+    background-color: green;
+}
+
+.sell-btn {
+    background-color: #ff2d79;
+}
+
+.sell-btn:hover {
+    background-color: red;
+}
+
+.transfert-btn {
+    background-color: lightslategray;
+}
+
+.transfert-btn:hover {
+    background-color: grey;
+}
+
+.price-currency {
+    text-align: center;
+    padding: 5px 0;
+    font-weight: bold;
+    color: #17c671!important;
+    font-size: 2rem;
+}
+
+.currency-detail-container {
+    padding: 30px 0;
+}
+.currency-details {
+    text-align: right;
+    font-weight: 300;
+    color: #cacedb;
+}
+
+.token-title-info {
+    display: inline-block;
+    width: 65%;
+    color: #cacedb;
+}
+
+.chart-and-detail-container {
+    display: flex;
+}
+
+.chart-currency {
+    width: 500px !important;
+    height: 270px !important;
+}

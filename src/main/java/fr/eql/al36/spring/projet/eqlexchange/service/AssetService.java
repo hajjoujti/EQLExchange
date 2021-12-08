@@ -55,4 +55,12 @@ public class AssetService {
     public Asset getById(Integer id) {
         return assetRepository.findById(id).get();
     }
+
+    public Double calculMarketCap(Currency currency) {
+        Double result;
+        Double currencyPrice = currency.getCurrencyPrices().get(currency.getCurrencyPrices().size() - 1).getPrice();
+        Double currencySupply = Double.parseDouble(currency.getCirculatingSupply());
+        result =  currencyPrice * currencySupply;
+        return result;
+    }
 }
