@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.springframework.org/security/tags">
 
 <head>
     <title>E-Xchange</title>
@@ -38,6 +38,11 @@
                 <hr>
                 <li>
                     <a href="#" th:href="@{'/user/profile'}"><i class="fa fa-regular fa-user"></i><span class="nav-icon-attribute">Name of User</span></a>
+                </li>
+                <li>
+                    <div sec:authorize="isAuthenticated()">
+                            <a href="#" th:href="@{/logout}" ydata-backdrop="false"><i style="color: red" class="fa fa-light fa-power-off"></i><span class="nav-icon-attribute">Logout</span></a>
+                    </div>
                 </li>
             </ul>
 
