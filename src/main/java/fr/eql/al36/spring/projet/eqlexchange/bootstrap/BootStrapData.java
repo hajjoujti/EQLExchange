@@ -265,44 +265,79 @@ public class BootStrapData implements CommandLineRunner {
         // ALAIN TRADE ORDERS
 
         // Alain wants to sell .0015 BTC for BNB
-        TradeOrder to1 = tradeOrderRepository.save(TradeOrder.builder().asset(alainBitcoin).currency(binanceCoin)
-                                                           .amount(.0015)
-                                                           .creationDate(LocalDateTime.of(2021, 6, 2, 18, 6, 52))
-                                                           .build());
+        TradeOrder to1 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(alain)
+                .currencyToBuy(binanceCoin)
+                .amountToBuy(.2)
+                .currencyToSell(bitcoin)
+                .amountToSell(0.0015)
+                .creationDate(LocalDateTime.of(2021, 6, 2, 18, 6, 52))
+                .build());
 
         // Alain wants to sell .027 ETH for BNB
-        TradeOrder to2 = tradeOrderRepository.save(TradeOrder.builder().asset(alainEthereum).currency(binanceCoin)
-                                                           .amount(.027)
-                                                           .creationDate(LocalDateTime.of(2021, 6, 2, 18, 27, 04))
-                                                           .build());
+        TradeOrder to2 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(alain)
+                .currencyToBuy(binanceCoin)
+                .currencyToSell(ethereum)
+                .amountToBuy(0.008)
+               .amountToSell(.027)
+
+               .creationDate(LocalDateTime.of(2021, 6, 2, 18, 27, 04))
+               .build());
 
         // Alain wants to sell .0012 BTC for EQL
-        TradeOrder to3 = tradeOrderRepository.save(TradeOrder.builder().asset(alainBitcoin).currency(eqlcoin).amount(
-                0.0012).creationDate(LocalDateTime.of(2021, 6, 2, 19, 1, 44)).build());
+        TradeOrder to3 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(alain)
+                .currencyToBuy(eqlcoin)
+                .currencyToSell(bitcoin)
+                .amountToBuy(0.0012)
+                .amountToSell(0.15)
+                .creationDate(LocalDateTime.of(2021, 6, 2, 19, 1, 44))
+                .build());
 
 
         // ANNE-SOPHIE TRADE ORDERS
 
         // Anne-Sophie wants to sell .002 BTC for EQL
-        TradeOrder to4 = tradeOrderRepository.save(TradeOrder.builder().asset(annesophieBitcoin).amount(0.002).currency(
-                eqlcoin).creationDate(LocalDateTime.of(2021, 6, 3, 9, 26, 11)).build());
+        TradeOrder to4 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(annesophie)
+                .amountToBuy(500)
+                .amountToSell(0.002)
+                .currencyToBuy(eqlcoin)
+                .currencyToSell(bitcoin)
+                .creationDate(LocalDateTime.of(2021, 6, 3, 9, 26, 11)).build());
 
         // Anne-Sophie wants to sell .0194 BNB for ETH
-        TradeOrder to5 = tradeOrderRepository.save(TradeOrder.builder().asset(annesophieBinanceCoin).amount(0.194)
-                                                           .currency(ethereum)
-                                                           .creationDate(LocalDateTime.of(2021, 6, 3, 10, 01, 57))
-                                                           .build());
+        TradeOrder to5 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(annesophie)
+                .amountToBuy(0.05)
+                .amountToSell(0.194)
+               .currencyToBuy(ethereum)
+                .currencyToSell(binanceCoin)
+               .creationDate(LocalDateTime.of(2021, 6, 3, 10, 01, 57))
+               .build());
 
 
         // ROBERT TRADE ORDERS
 
         // Robert wants to sell 200 EQL for BTC
-        TradeOrder to6 = tradeOrderRepository.save(TradeOrder.builder().asset(robertEQLCoin).amount(200).currency(
-                bitcoin).creationDate(LocalDateTime.of(2021, 6, 3, 11, 04, 3)).build());
+        TradeOrder to6 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(robert)
+                .amountToBuy(.005)
+                .amountToSell(200)
+                .currencyToBuy(bitcoin)
+                .currencyToSell(eqlcoin)
+                .creationDate(LocalDateTime.of(2021, 6, 3, 11, 04, 3))
+                .build());
 
         // Robert wants to sell .021 BNB for EQL
-        TradeOrder to7 = tradeOrderRepository.save(TradeOrder.builder().asset(robertBinanceCoin).amount(0.021).currency(
-                eqlcoin).creationDate(LocalDateTime.of(2021, 6, 3, 11, 07, 21)).build());
+        TradeOrder to7 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(robert)
+                .amountToBuy(500)
+                .amountToSell(0.021)
+                .currencyToBuy(eqlcoin)
+                .currencyToSell(binanceCoin)
+                .creationDate(LocalDateTime.of(2021, 6, 3, 11, 07, 21)).build());
 
 
         ////////////////////////////////
@@ -317,28 +352,31 @@ public class BootStrapData implements CommandLineRunner {
         // Alain (2) gets 0.194 BNB (order 5's amount) and Anne-Sophie (5) gets 0.027 ETH (order 2's amount)
 
         // 1. Alain's ETH asset is debited with order 3's amount
-        Asset alainWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(to2.getAsset().getUser(),
-                                                                                   to2.getCurrency());
-        alainWantedCurrencyAsset.setBalance(alainWantedCurrencyAsset.getBalance() - to5.getAmount());
+        Asset alainWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(alain,
+                                                                                   to2.getCurrencyToBuy());
+        alainWantedCurrencyAsset.setBalance(alainWantedCurrencyAsset.getBalance() - to5.getAmountToBuy());
 
         // 2. Anne-Sophie's BNB asset is debited with order 3's amount
-        Asset annesophieWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(to5.getAsset().getUser(),
-                                                                                        to5.getCurrency());
-        alainWantedCurrencyAsset.setBalance(alainWantedCurrencyAsset.getBalance() - to2.getAmount());
+        Asset annesophieWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(annesophie,
+                                                                                        to5.getCurrencyToBuy());
+        annesophieWantedCurrencyAsset.setBalance(annesophieWantedCurrencyAsset.getBalance() - to2.getAmountToBuy());
 
 
         // 3. Alain's BNB asset is credited with his order's amount
-        to2.getAsset().setBalance(to2.getAsset().getBalance() + to2.getAmount());
+        alainBinanceCoin.setBalance(alainBinanceCoin.getBalance() + to2.getAmountToBuy());
 
         // 3. Anne-Sophie's ETH asset is credited with her order's amount
-        to5.getAsset().setBalance(to5.getAsset().getBalance() + to5.getAmount());
+        annesophieEthereum.setBalance(annesophieEthereum.getBalance() + to5.getAmountToBuy());
 
         // Both orders are completely satisfied and are updated with completion date
 
-        Transaction transaction1 = transactionRepository.save(Transaction.builder().date(
-                        LocalDateTime.of(2021, 6, 3, 10, 2, 1)).remainingAmount(0).txId(
-                                "tx_c4ca4238a0b923820dcc509a6f75849b")
-                                                                      .tradeOrder1(to2).tradeOrder2(to5).build());
+        Transaction transaction1 = transactionRepository.save(Transaction.builder()
+                .date(LocalDateTime.of(2021, 6, 3, 10, 2, 1))
+                .amount(3)
+                .txId("tx_c4ca4238a0b923820dcc509a6f75849b")
+                .sourceAsset(annesophieEthereum)
+                .targetAsset(alainEthereum)
+                .build());
 
 
         // TRANSACTION 2
@@ -347,19 +385,27 @@ public class BootStrapData implements CommandLineRunner {
         // Alain (3) gets 118.1 EQL (/!\ only a part of order 6's amount)
         // Robert (6) gets 0.0012 BTC (order 3's amount)
 
-        to6.setAmount(to6.getAmount() + to3.getAmount());
+        to6.setAmountToBuy(to6.getAmountToBuy() + to3.getAmountToBuy());
 
         Transaction transaction2 = transactionRepository.save(Transaction.builder().date(
-                LocalDateTime.of(2021, 6, 3, 11, 4, 5)).remainingAmount(40.9).txId(
-                "tx_c81e728d9d4c2f636f067f89cc14862c").tradeOrder1(to3).tradeOrder2(to6).build());
+                LocalDateTime.of(2021, 6, 3, 11, 4, 5))
+                .amount(40.9)
+                .txId("tx_c81e728d9d4c2f636f067f89cc14862c")
+                .sourceAsset(alainBitcoin)
+                .targetAsset(robertBitcoin)
+                .build());
 
         // Order 3 is satisfied, but not order 6
         // A new order is created with Order 6 remaining amount at the end transaction completion
 
-        TradeOrder to8 = tradeOrderRepository.save(TradeOrder.builder().asset(robertEQLCoin).amount(
-                        transaction2.getRemainingAmount()).currency(bitcoin)
-                                                           .creationDate(LocalDateTime.of(2021, 6, 3, 11, 4, 7))
-                                                           .build());
+        TradeOrder to8 = tradeOrderRepository.save(TradeOrder.builder()
+                .user(robert)
+                .amountToBuy(2)
+                .amountToSell(1000)
+                .currencyToBuy(bitcoin)
+                .currencyToSell(eqlcoin)
+                .creationDate(LocalDateTime.of(2021, 6, 3, 11, 4, 7))
+                .build());
 
     }
 
