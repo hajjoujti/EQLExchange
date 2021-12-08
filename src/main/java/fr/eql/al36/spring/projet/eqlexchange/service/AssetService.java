@@ -41,6 +41,16 @@ public class AssetService {
         return assetRepository.getAssetByUserAndCurrency(user, currency);
     }
 
+    public Asset getEqlAssetByUser(User user) {
+        List<Asset> assets = assetRepository.getAllByUser(user);
+        for (Asset asset : assets) {
+            if (asset.getCurrency().getTicker().equals("XQL")) {
+                return asset;
+            }
+        }
+        return null;
+    }
+
     public List<Asset> getAllByUser(User user) {
         return assetRepository.getAllByUser(user);
     }
