@@ -32,12 +32,7 @@ public class AssetService {
     }
 
     public List<Asset> getUserWallet(User user) {
-        List<Asset> assets = assetRepository.getAssetsByUserOrderByBalanceDesc(user);
-        System.out.println("userrrrr" + user.getUsername());
-        for(Asset asset : assets) {
-            System.out.println("assettttt" + asset.getBalance());
-        }
-        return assets;
+        return assetRepository.getAssetsByUserOrderByBalanceDesc(user);
     }
 
     public Asset getByUserAndCurrency(User user, Currency currency) {
