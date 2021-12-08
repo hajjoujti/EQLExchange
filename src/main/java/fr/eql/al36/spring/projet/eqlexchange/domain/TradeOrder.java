@@ -18,34 +18,32 @@ public class TradeOrder {
     private LocalDateTime creationDate;
     private LocalDateTime cancellationDate;
     private LocalDateTime completionDate;
-    private double amount;
+    private double amountToSell;
+    private double amountToBuy;
 
     @ManyToOne
-    @JoinColumn(name = "asset_id")
-    private Asset asset;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "currency_id")
-    private Currency currency;
+    private Currency currencyToBuy;
 
     @ManyToOne
     @JoinColumn(name = "currency_to_sell_id")
     private Currency currencyToSell;
 
-    @ManyToOne
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TradeOrder tradeOrder = (TradeOrder) o;
-        return Double.compare(tradeOrder.amount, amount) == 0 && Objects.equals(id, tradeOrder.id) && Objects.equals(creationDate, tradeOrder.creationDate) && Objects.equals(cancellationDate, tradeOrder.cancellationDate) && Objects.equals(completionDate, tradeOrder.completionDate) && Objects.equals(asset, tradeOrder.asset) && Objects.equals(currency, tradeOrder.currency) && Objects.equals(transaction, tradeOrder.transaction);
+        TradeOrder that = (TradeOrder) o;
+        return Double.compare(that.amountToSell, amountToSell) == 0 && Double.compare(that.amountToBuy, amountToBuy) == 0 && Objects.equals(id, that.id) && Objects.equals(creationDate, that.creationDate) && Objects.equals(cancellationDate, that.cancellationDate) && Objects.equals(completionDate, that.completionDate) && Objects.equals(user, that.user) && Objects.equals(currencyToBuy, that.currencyToBuy) && Objects.equals(currencyToSell, that.currencyToSell);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creationDate, cancellationDate, completionDate, amount, asset, currency, transaction);
+        return Objects.hash(id, creationDate, cancellationDate, completionDate, amountToSell, amountToBuy, user, currencyToBuy, currencyToSell);
     }
 }

@@ -19,24 +19,16 @@ public class Transaction {
 
     private LocalDateTime date;
     private String txId;
-    private double remainingAmount;
 
-    @OneToOne
-    private TradeOrder tradeOrder1;
+    @ManyToOne
+    @JoinColumn(name = "source_asset_id")
+    private Asset sourceAsset;
 
-    @OneToOne
-    private TradeOrder tradeOrder2;
+     @ManyToOne
+    @JoinColumn(name = "target_asset_id")
+    private Asset targetAsset;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
-        return Double.compare(that.remainingAmount, remainingAmount) == 0 && Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(txId, that.txId);
-    }
+    private double amount;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, date, txId, remainingAmount);
-    }
+
 }
