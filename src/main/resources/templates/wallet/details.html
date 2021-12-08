@@ -39,7 +39,7 @@
                     </div>
                     <a href="#" th:href="@{'/trade/buy/' + ${asset.currency.id}}"><button class="buy-btn">Buy</button></a>
                     <button class="sell-btn">Sell</button>
-                    <button class="transfert-btn">Transfert</button>
+                    <button class="transfert-btn">Transfer</button>
                 </div>
 
                 <div class="currency-detail-container">
@@ -63,6 +63,33 @@
             <canvas id="myChart" class="chart-currency"></canvas>
         </div>
 
+    </div>
+    <div>
+        <table class="table table-dark">
+            <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Action</th>
+                <th th:text="${asset.currency.name + ' Price'}" scope="col"></th>
+                <th th:text=" ${asset.currency.name + ' Amount'} " scope="col"></th>
+                <th scope="col">Total USD</th>
+                <th scope="col">Txn Hash</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <th scope="row" th:text="${transaction.date.toString.replace('T', ' ')}"></th>
+                <td th:if="${transaction.tradeOrder1.currency.equals(asset.currency)}" style="color: red">Sell</td>
+                <td th:unless="${transaction.tradeOrder1.currency.equals(asset.currency)}" style="color: #28a745">
+                    Buy
+                </td>
+                <td th:text="${transaction.tradeOrder1.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></td>
+                <td th:text="${transaction.tradeOrder1.amount}"></td>
+                <td th:text="${transaction.tradeOrder1.amount * (asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price)     }"></td>
+                <th scope="row" th:text="${transaction.txId}"></th>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>

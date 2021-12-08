@@ -17,19 +17,22 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("static/**",
-                             "templates/access-denied.html")
-                .permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/access-denied").permitAll()
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/img/**").permitAll()
+                .antMatchers("/js/**").permitAll()
                 .antMatchers("/user/**",
                              "/currency/**",
                              "/transaction/**",
-                             "/wallet/**").hasRole("USER");
-        http.authorizeRequests(
-                (requests) -> ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.anyRequest()).authenticated());
-        http.formLogin().defaultSuccessUrl("/user/dashboard")
+                             "/wallet/**").hasRole("USER")
+                .anyRequest().authenticated()
+                .and().
+                formLogin().defaultSuccessUrl("/user/dashboard")
                 .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
-        http.httpBasic();
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .and()
+                .logout().logoutSuccessUrl("/");
     }
 
 

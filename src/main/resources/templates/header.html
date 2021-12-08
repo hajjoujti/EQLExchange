@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.springframework.org/security/tags">
 <head>
     <meta charset="UTF-8">
 </head>
 <body>
-    <div layout:fragment="header">
+<div layout:fragment="header">
+    <div sec:authorize="isAuthenticated()">
+        <div class="button">
+            <a href="#" th:href="@{/logout}" class="btn" data-backdrop="false">Logout</a>
+        </div>
     </div>
+</div>
 </body>
 </html>
