@@ -25,8 +25,7 @@
         <td th:text="${asset.balance}"></td>
         <td th:text="${asset.balance * asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></td>
         <td><a href="#" th:href="@{'/wallet/' + ${asset.id}}">Details</a></td>
-        <td><a href="#" th:href="@{'/trade/5/' + ${asset.currency.id}}">Sell</a></td>
-        <td><a href="#" th:href="@{'/trade/' + ${asset.currency.id} + '/5'}">Buy</a></td>
+        <td><a href="#" th:href="@{'/trade/buy/' + ${asset.currency.id}}">Buy</a></td>
         <td><a href="#" th:href="@{'/transfer/' + ${asset.id}}">Transfer</a></td>
     </tr>
 </table>
