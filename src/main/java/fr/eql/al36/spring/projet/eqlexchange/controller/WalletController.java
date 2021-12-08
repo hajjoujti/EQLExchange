@@ -32,7 +32,7 @@ public class WalletController {
 
     @GetMapping("/")
     public String getIndexPage(Model model) {
-        return "user/dashboard";
+        return "index";
     }
 
     @GetMapping("wallet")
