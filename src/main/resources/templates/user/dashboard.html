@@ -13,8 +13,10 @@
 
     <div class="dashboard-container">
 
+
         <div class="asset-detail-container">
-            <div class="currency-block" th:each="currency : ${currencies}">
+            <h2 class="title-block"><i style="color: white" class="fa fa-solid fa-coins"></i> Coins</h2>
+            <div class="currency-block" th:if="!${currency.equals(eqlasset.currency)}" th:each="currency : ${currencies}">
 
                 <div style="display: flex">
                 <div class="asset-title">
@@ -58,9 +60,9 @@
             </div>
         </div>
 
-        <div style="display: flex; flex-direction: column">
+        <div class="xql-and-asset">
             <div class="container-assets">
-                <h2><i style="color: white" class="fa fa-light fa-chart-line"></i> E-coin</h2>
+                <h2 class="title-block"><i style="color: white" class="fa fa-light fa-chart-line"></i> E-coin</h2>
                 <div>
                     <canvas id="myChart" class="chart-currency"></canvas>
                 </div>
@@ -97,7 +99,7 @@
             </div>
 
             <div class="container-assets">
-                <h2><i class="fa fa-light fa-box"></i> Assets</h2>
+                <h2 class="title-block"><i class="fa fa-light fa-box"></i> Assets</h2>
                 <div class="assets-container" th:if="${asset.balance != 0}" th:each="asset : ${assets}">
 
                     <div>

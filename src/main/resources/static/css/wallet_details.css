@@ -149,9 +149,7 @@
 }
 
 .container-assets {
-    padding: 20px;
-    margin: 0 auto;
-
+    padding: 20px 20px 90px 20px;
 }
 .asset-value {
     color: #727272;
@@ -201,4 +199,14 @@
 
 .dashboard-container .asset-detail-container {
    padding:  0 46px 0px 45px;
+}
+
+.xql-and-asset {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+}
+
+.title-block {
+    padding: 10px;
 }
