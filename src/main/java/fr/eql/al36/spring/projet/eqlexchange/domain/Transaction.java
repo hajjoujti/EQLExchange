@@ -31,4 +31,19 @@ public class Transaction {
     private double amount;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Double.compare(that.amount, amount) == 0 && Objects.equals(id, that.id) &&
+               Objects.equals(date, that.date) && Objects.equals(txId, that.txId);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, date, txId, amount);
+    }
+
 }
