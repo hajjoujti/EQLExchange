@@ -1,5 +1,6 @@
 package fr.eql.al36.spring.projet.eqlexchange.service;
 
+import com.google.common.hash.Hashing;
 import fr.eql.al36.spring.projet.eqlexchange.domain.*;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyPriceRepository;
@@ -8,6 +9,7 @@ import fr.eql.al36.spring.projet.eqlexchange.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -135,7 +137,7 @@ public class TransactionService {
                 .amount(amount)
                 .date(LocalDateTime.now())
                 .build();
-        transaction.setTxId("tx_" + transaction.hashCode());
+        transaction.setTxId(hash256(transaction.toString()));
         transactionRepository.save(transaction);
 
         // SECOND TRANSACTION
@@ -160,7 +162,7 @@ public class TransactionService {
                 .amount(amount)
                 .date(LocalDateTime.now())
                 .build();
-        transaction.setTxId("tx_" + transaction.hashCode());
+        transaction.setTxId(hash256(transaction.toString()));
         transactionRepository.save(transaction);
 
         if(!isEven) {
@@ -216,7 +218,7 @@ public class TransactionService {
                 .amount(amount)
                 .date(LocalDateTime.now())
                 .build();
-        transaction.setTxId("tx_" + transaction.hashCode());
+        transaction.setTxId(hash256(transaction.toString()));
         transactionRepository.save(transaction);
     }
 
@@ -240,9 +242,13 @@ public class TransactionService {
                 .amount(transaction.getAmount())
                 .date(LocalDateTime.now())
                 .build();
-        transaction.setTxId("tx_" + transaction.hashCode());
+        transaction.setTxId(hash256(transaction.toString()));
         transactionRepository.save(transaction);
         return transaction;
     }
 
+    private String hash256(String originalString) {
+        String hashedString = Hashing.sha256().hashString(originalString, StandardCharsets.UTF_8).toString();
+        return Hashing.sha256().hashString(hashedString, StandardCharsets.UTF_8).toString();
+    }
 }
