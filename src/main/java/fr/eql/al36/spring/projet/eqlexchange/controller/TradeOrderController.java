@@ -76,7 +76,7 @@ public class TradeOrderController {
         tradeOrder.setAmountToBuy(currencyService.getCurrencyAmountIn(currencyToBuy,currencyToSell, tradeOrder.getAmountToSell()));
         System.out.println("PostMapping: amount to buy :" + tradeOrder.getAmountToBuy());
         tradeOrder.setCreationDate(LocalDateTime.now());
-        tradeOrderService.place(tradeOrder);
+        tradeOrder = tradeOrderService.place(tradeOrder);
         List<TradeOrder> matchingTradeOrders = tradeOrderService.match(tradeOrder);
 
         if (matchingTradeOrders.size() > 0) {
