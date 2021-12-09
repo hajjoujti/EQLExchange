@@ -1,10 +1,6 @@
 package fr.eql.al36.spring.projet.eqlexchange.service;
 
-import fr.eql.al36.spring.projet.eqlexchange.domain.Asset;
-import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
-import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
-import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
-import fr.eql.al36.spring.projet.eqlexchange.domain.User;
+import fr.eql.al36.spring.projet.eqlexchange.domain.*;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyPriceRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
@@ -13,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,11 +24,12 @@ public class TransactionService {
     private final AssetRepository assetRepository;
     private final CurrencyPriceRepository currencyPriceRepository;
     private final CurrencyPriceService currencyPriceService;
+    private final UserService userService;
 
 
     public TransactionService(AssetService assetService, TradeOrderService tradeOrderService,
                               TransactionRepository transactionRepository, TradeOrderRepository tradeOrderRepository,
-                              AssetRepository assetRepository, CurrencyPriceRepository currencyPriceRepository, CurrencyPriceService currencyPriceService) {
+                              AssetRepository assetRepository, CurrencyPriceRepository currencyPriceRepository, CurrencyPriceService currencyPriceService, UserService userService) {
 
         this.assetService = assetService;
         this.tradeOrderService = tradeOrderService;
@@ -42,6 +38,7 @@ public class TransactionService {
         this.assetRepository = assetRepository;
         this.currencyPriceRepository = currencyPriceRepository;
         this.currencyPriceService = currencyPriceService;
+        this.userService = userService;
     }
 
 public List<Transaction> getTransactionsDoneByUser(User user) {
@@ -60,7 +57,7 @@ public List<Transaction> getTransactionsDoneByUser(User user) {
         return transactionRepository.findAllByAssets(assets);
     }
 
-    public void execute(TradeOrder tradeOrder1, TradeOrder tradeOrder2) {
+    public void executeFromTradeOrders(TradeOrder tradeOrder1, TradeOrder tradeOrder2) {
 
         System.out.println("entered execute");
         System.out.println("----------");
@@ -189,5 +186,23 @@ public List<Transaction> getTransactionsDoneByUser(User user) {
             tradeOrderRepository.save(tradeOrder1);
             tradeOrderRepository.save(tradeOrder2);
         }
+    }
+
+    public void executeFromPayment(Payment payment) {
+
+        User owner = userService.findUserById(1);
+        Asset sourceAsset = assetService.getByUserAndCurrency(owner,payment.getCurrency());
+        Asset targetAsset = payment.getAsset();
+        double amount = payment.getAmount();
+
+        assetService.creditFromSourceAsset(targetAsset,sourceAsset,amount);
+
+        Transaction transaction = Transaction.builder()
+                .targetAsset(targetAsset)
+                .amount(amount)
+                .date(LocalDateTime.now())
+                .build();
+        transaction.setTxId("tx_" + transaction.hashCode());
+        transactionRepository.save(transaction);
     }
 }

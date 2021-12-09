@@ -2,7 +2,6 @@ package fr.eql.al36.spring.projet.eqlexchange.controller;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
 import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
-import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
 import fr.eql.al36.spring.projet.eqlexchange.domain.User;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyRepository;
@@ -87,7 +86,7 @@ public class TradeOrderController {
 
             TradeOrder selectedTradeOrder = tradeOrderService.selectBestAmong(tradeOrder, matchingTradeOrders);
             System.out.println("selected: " + selectedTradeOrder.getId());
-            transactionService.execute(tradeOrder, selectedTradeOrder);
+            transactionService.executeFromTradeOrders(tradeOrder, selectedTradeOrder);
         }
 
         return trade(model, currencyToBuy.getId().toString(), session);
