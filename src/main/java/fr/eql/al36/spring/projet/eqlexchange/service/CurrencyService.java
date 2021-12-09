@@ -25,6 +25,14 @@ public class CurrencyService {
         return null;
     }
 
+    public List<Currency> findAll(){
+        return (List<Currency>) currencyRepository.findAll();
+    }
+
+    public Currency findByTicker(String ticker) {
+        return currencyRepository.findByTicker(ticker);
+    }
+
     public List<Currency> getAllExceptOneWithId(Integer id) {
         return currencyRepository.getAllExceptOneWithId(id);
     }
