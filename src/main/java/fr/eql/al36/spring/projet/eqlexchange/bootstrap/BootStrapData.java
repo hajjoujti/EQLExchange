@@ -114,6 +114,8 @@ public class BootStrapData implements CommandLineRunner {
                 38000).dateTime((LocalDateTime.of(2021, 6, 2, 18, 6, 52))).build());
         currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
                 22034.56).dateTime((LocalDateTime.of(2021, 11, 2, 13, 32, 0))).build());
+        currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
+                22034.56).dateTime((LocalDateTime.of(2021, 12, 8, 13, 32, 0))).build());
         CurrencyPrice ethereumPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(ethereum).price(
                 3922.09).dateTime(LocalDateTime.now()).build());
         CurrencyPrice binanceCoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(binanceCoin)

@@ -30,8 +30,10 @@
         seconds = priceAndDate.dateTime.time.second;
         dateTime = new Date(year,month,day,hour,minutes,seconds);
         if(dateTime.getDate() == today.getDate()) {
-            xValues.push(dateTime.toLocaleTimeString());
-        } else {
+            xValues.push("Today " + dateTime.toLocaleTimeString());
+        } else if(dateTime.getDate() == today.getDate() - 1) {
+            xValues.push("Yesterday " + dateTime.toLocaleTimeString());
+        } else{
             xValues.push(dateTime.toLocaleString());
         }
         yValues.push(priceAndDate.price);
