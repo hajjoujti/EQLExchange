@@ -100,19 +100,30 @@ public class TransactionService {
             isEven = true;
         }
 
+
+        // FIRST TRANSACTION
+        // BUY TRADE ORDER 1
+        // SELL TRADE ORDER 2
+        // AMOUNT : tradeOrder1.getAmountToBuy / tradeOrder2.getAmountToSell
+        // CURRENCY : tradeOrder1.getCurrencyToBuy / tradeOrder2.getCurrencyToSell
+
         double amount;
         if (isEven) {
-            amount = tradeOrder1.getAmountToSell();
+            amount = tradeOrder2.getAmountToSell();
+            System.out.println("execute: trade orders are even, amount to sell: " + amount + " " + tradeOrder2.getCurrencyToSell().getTicker());
         } else {
             amount = (Math.min(tradeOrder1.getAmountToBuy(), tradeOrder2.getAmountToSell()));
+            System.out.println("execute: trade orders are NOT even, amount to sell: " + amount + " " + tradeOrder2.getCurrencyToSell().getTicker());
+
         }
+        System.out.println("execute: proceeding to first transfer");
 
         User tradeOrder1User = tradeOrder1.getUser();
         User tradeOrder2User = tradeOrder2.getUser();
 
-        Currency currency = tradeOrder1.getCurrencyToSell();
-        Asset sourceAsset = assetService.getByUserAndCurrency(tradeOrder1User,currency);
-        Asset targetAsset = assetService.getByUserAndCurrency(tradeOrder2User,currency);
+        Currency currency = tradeOrder2.getCurrencyToSell();
+        Asset targetAsset = assetService.getByUserAndCurrency(tradeOrder1User,currency);
+        Asset sourceAsset = assetService.getByUserAndCurrency(tradeOrder2User,currency);
         assetService.creditFromSourceAsset(targetAsset, sourceAsset, amount);
         Transaction transaction = Transaction.builder()
                 .sourceAsset(sourceAsset)
@@ -123,15 +134,22 @@ public class TransactionService {
         transaction.setTxId("tx_" + transaction.hashCode());
         transactionRepository.save(transaction);
 
+        // SECOND TRANSACTION
+        // BUY TRADE ORDER 2
+        // SELL TRADE ORDER 1
+        // AMOUNT : tradeOrder2.getAmountToBuy / tradeOrder1.getAmountToSell
+        // CURRENCY : tradeOrder2.getCurrencyToBuy / tradeOrder1.getCurrencyToSell
+
+        System.out.println("execute: proceeding to second transfer");
         if (isEven) {
-            amount = tradeOrder2.getAmountToSell();
+            amount = tradeOrder1.getAmountToSell();
         } else {
             amount = (Math.min(tradeOrder2.getAmountToBuy(), tradeOrder1.getAmountToSell()));
         }
-        currency = tradeOrder2.getCurrencyToSell();
-        sourceAsset = assetService.getByUserAndCurrency(tradeOrder2User,currency);
-        targetAsset = assetService.getByUserAndCurrency(tradeOrder1User,currency);
-        assetService.creditFromSourceAsset(targetAsset, sourceAsset, tradeOrder2.getAmountToSell());
+        currency = tradeOrder1.getCurrencyToSell();
+        targetAsset = assetService.getByUserAndCurrency(tradeOrder2User,currency);
+        sourceAsset = assetService.getByUserAndCurrency(tradeOrder1User,currency);
+        assetService.creditFromSourceAsset(targetAsset, sourceAsset, amount);
         transaction = Transaction.builder()
                 .sourceAsset(sourceAsset)
                 .targetAsset(targetAsset)
@@ -144,15 +162,24 @@ public class TransactionService {
         if (!isEven) {
             TradeOrder biggerTradeOrder;
             TradeOrder smallerTradeOrder;
+
             if (tradeOrder1.getAmountToBuy() > tradeOrder2.getAmountToSell()) {
                 biggerTradeOrder = tradeOrder1;
                 smallerTradeOrder = tradeOrder2;
+
             }
             else {
                 biggerTradeOrder = tradeOrder2;
                 smallerTradeOrder = tradeOrder1;
             }
 
+            smallerTradeOrder.setCompletionDate(LocalDateTime.now());
+            biggerTradeOrder.setCancellationDate(LocalDateTime.now());
+
+            tradeOrderRepository.save(smallerTradeOrder);
+            tradeOrderRepository.save(biggerTradeOrder);
+
+            System.out.println("execute: creating new trade order");
             tradeOrderService.place(TradeOrder.builder()
                     .user(biggerTradeOrder.getUser())
                     .currencyToBuy(biggerTradeOrder.getCurrencyToBuy())
@@ -161,6 +188,11 @@ public class TransactionService {
                     .amountToSell(biggerTradeOrder.getAmountToSell() - smallerTradeOrder.getAmountToBuy())
                     .creationDate(LocalDateTime.now())
                     .build());
+        } else {
+            tradeOrder1.setCompletionDate(LocalDateTime.now());
+            tradeOrder2.setCompletionDate(LocalDateTime.now());
+            tradeOrderRepository.save(tradeOrder1);
+            tradeOrderRepository.save(tradeOrder2);
         }
     }
 }
