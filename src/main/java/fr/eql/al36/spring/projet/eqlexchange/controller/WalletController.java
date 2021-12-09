@@ -38,7 +38,7 @@ public class WalletController {
     @GetMapping("wallet")
     public String displayWallet(Model model, HttpSession session) {
         User connectedUser = (User) session.getAttribute("sessionUser");
-        model.addAttribute("user", connectedUser);
+        model.addAttribute("sessionUser", connectedUser);
         model.addAttribute("assets", assetService.getUserWallet(connectedUser));
         return "wallet/show";
     }
@@ -48,6 +48,7 @@ public class WalletController {
         User connectedUser = (User) session.getAttribute("sessionUser");
         Double marketCap = assetService.calculMarketCap(assetService.getById(Integer.parseInt(id)).getCurrency());
         model.addAttribute("asset", assetService.getById(Integer.parseInt(id)));
+        model.addAttribute("sessionUser", connectedUser);
         model.addAttribute("marketcap", marketCap);
         return "wallet/details";
     }
