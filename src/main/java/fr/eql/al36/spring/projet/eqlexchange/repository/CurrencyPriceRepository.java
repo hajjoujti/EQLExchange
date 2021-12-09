@@ -10,6 +10,6 @@ public interface CurrencyPriceRepository extends CrudRepository<CurrencyPrice, I
 
     CurrencyPrice findTopByCurrencyOrderByIdDesc(Currency currency);
 
-    List<CurrencyPrice> getAllByCurrencyOrderByIdAsc(Currency currency);
+    List<CurrencyPrice> getAllByCurrencyOrderByDateTimeAsc(Currency currency);
 
 }
