@@ -28,4 +28,11 @@ public class UserService {
         return null;
     }
 
+
+    public User findUserWalletAddress(String walletAddress) {
+        if(userRepository.findByWalletAddress(walletAddress).isPresent()){
+            return userRepository.findByWalletAddress(walletAddress).get();
+        }
+        return null;
+    }
 }
