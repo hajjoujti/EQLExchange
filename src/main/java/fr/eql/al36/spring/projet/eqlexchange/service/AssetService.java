@@ -26,10 +26,21 @@ public class AssetService {
 
     public void creditFromSourceAsset(Asset targetAsset, Asset sourceAsset, double amount) {
         if (targetAsset.getCurrency().getId() == sourceAsset.getCurrency().getId() && sourceAsset.getBalance() >= amount) {
+            System.out.println("creditFromSourceAsset: asset currencies match & source asset > amount");
             sourceAsset.setBalance(sourceAsset.getBalance() - amount);
             targetAsset.setBalance(targetAsset.getBalance() + amount);
+            System.out.println("creditFromSourceAsset: source " + sourceAsset.getUser().getUsername() + " is debited " + amount + " " + sourceAsset.getCurrency().getTicker());
+            System.out.println("creditFromSourceAsset: target " + targetAsset.getUser().getUsername() + " is credited " + amount + " " + targetAsset.getCurrency().getTicker());
             assetRepository.save(sourceAsset);
             assetRepository.save(targetAsset);
+        }
+        else {
+            System.out.println("creditFromSourceAsset: could not process transfer");
+            System.out.println("creditFromSourceAsset: sourceAsset currency: " + sourceAsset.getCurrency().getTicker());
+            System.out.println("creditFromSourceAsset: targetAsset currency: " + targetAsset.getCurrency().getTicker());
+            System.out.println("creditFromSourceAsset: sourceAsset balance: " + sourceAsset.getBalance());
+            System.out.println("creditFromSourceAsset: transfer amount: " + amount);
+
         }
     }
 
