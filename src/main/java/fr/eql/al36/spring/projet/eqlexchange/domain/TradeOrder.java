@@ -7,7 +7,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class TradeOrder {
 
@@ -15,10 +18,17 @@ public class TradeOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private LocalDateTime creationDate;
+
     private LocalDateTime cancellationDate;
+
     private LocalDateTime completionDate;
+
+    @Column(nullable = false)
     private double amountToSell;
+
+    @Column(nullable = false)
     private double amountToBuy;
 
     @ManyToOne
@@ -36,14 +46,22 @@ public class TradeOrder {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
         TradeOrder that = (TradeOrder) o;
-        return Double.compare(that.amountToSell, amountToSell) == 0 && Double.compare(that.amountToBuy, amountToBuy) == 0 && Objects.equals(id, that.id) && Objects.equals(creationDate, that.creationDate) && Objects.equals(cancellationDate, that.cancellationDate) && Objects.equals(completionDate, that.completionDate) && Objects.equals(user, that.user) && Objects.equals(currencyToBuy, that.currencyToBuy) && Objects.equals(currencyToSell, that.currencyToSell);
+        return Double.compare(that.amountToSell, amountToSell) == 0 && Double.compare(that.amountToBuy, amountToBuy) ==
+                                                                       0 && Objects.equals(id, that.id) &&
+               Objects.equals(creationDate, that.creationDate) && Objects.equals(cancellationDate,
+                                                                                 that.cancellationDate) &&
+               Objects.equals(completionDate, that.completionDate) && Objects.equals(user, that.user) && Objects.equals(
+                currencyToBuy, that.currencyToBuy) && Objects.equals(currencyToSell, that.currencyToSell);
     }
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creationDate, cancellationDate, completionDate, amountToSell, amountToBuy, user, currencyToBuy, currencyToSell);
+        return Objects.hash(id, creationDate, cancellationDate, completionDate, amountToSell, amountToBuy, user,
+                            currencyToBuy, currencyToSell);
     }
+
 }

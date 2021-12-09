@@ -9,7 +9,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Transaction {
 
@@ -17,14 +20,17 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private LocalDateTime date;
+
+    @Column(unique = true, nullable = false)
     private String txId;
 
     @ManyToOne
     @JoinColumn(name = "source_asset_id")
     private Asset sourceAsset;
 
-     @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "target_asset_id")
     private Asset targetAsset;
 

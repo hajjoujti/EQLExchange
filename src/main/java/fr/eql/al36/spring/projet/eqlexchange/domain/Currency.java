@@ -8,7 +8,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Currency {
 
@@ -16,10 +19,17 @@ public class Currency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true, nullable = false)
     private String name;
+
+    @Column(unique = true, nullable = false)
     private String ticker;
+
     private String contractAddress;
+
+    @Column(nullable = false)
     private long maximumSupply;
+
     private String circulatingSupply;
 
     @ManyToOne
@@ -29,7 +39,7 @@ public class Currency {
     @OneToMany(mappedBy = "currencyToBuy")
     private Set<TradeOrder> buyTradeOrders;
 
-        @OneToMany(mappedBy = "currencyToSell")
+    @OneToMany(mappedBy = "currencyToSell")
     private Set<TradeOrder> sellTradeOrders;
 
 

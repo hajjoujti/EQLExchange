@@ -6,7 +6,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class Payment {
 
@@ -14,7 +17,9 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private double amount;
+
     private String card;
 
     @ManyToOne
@@ -25,16 +30,19 @@ public class Payment {
     @JoinColumn(name = "asset_id")
     private Asset asset;
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
         return Objects.equals(id, payment.id) && Objects.equals(currency, payment.currency);
     }
+
 
     @Override
     public int hashCode() {
         return Objects.hash(id, currency);
     }
+
 }
