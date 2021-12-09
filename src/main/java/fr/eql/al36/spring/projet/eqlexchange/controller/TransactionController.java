@@ -1,14 +1,7 @@
 package fr.eql.al36.spring.projet.eqlexchange.controller;
 
-import fr.eql.al36.spring.projet.eqlexchange.domain.Asset;
-import fr.eql.al36.spring.projet.eqlexchange.domain.Payment;
-import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
-import fr.eql.al36.spring.projet.eqlexchange.domain.User;
-import fr.eql.al36.spring.projet.eqlexchange.service.AssetService;
-import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyService;
-import fr.eql.al36.spring.projet.eqlexchange.service.PaymentService;
-import fr.eql.al36.spring.projet.eqlexchange.service.TransactionService;
-import fr.eql.al36.spring.projet.eqlexchange.service.UserService;
+import fr.eql.al36.spring.projet.eqlexchange.domain.*;
+import fr.eql.al36.spring.projet.eqlexchange.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,15 +24,18 @@ public class TransactionController {
 
     private final UserService userService;
 
+    private final CurrencyPriceService currencyPriceService;
+
 
     public TransactionController(TransactionService transactionService, CurrencyService currencyService,
                                  PaymentService paymentService, AssetService assetService,
-                                 UserService userService) {
+                                 UserService userService, CurrencyPriceService currencyPriceService) {
         this.transactionService = transactionService;
         this.currencyService = currencyService;
         this.paymentService = paymentService;
         this.assetService = assetService;
         this.userService = userService;
+        this.currencyPriceService = currencyPriceService;
     }
 
 
@@ -76,6 +72,8 @@ public class TransactionController {
     @GetMapping("wallet/{id}/transfer")
     public String makeTransfer(Model model, HttpSession session, @PathVariable String id) {
         User connectedUser = (User) session.getAttribute("sessionUser");
+        Currency currency = assetService.getById(Integer.parseInt(id)).getCurrency();
+        model.addAttribute("currencyPricesJSON", currencyPriceService.getCurrencyPricesJSON(currency));
         model.addAttribute("sessionUser", connectedUser);
         model.addAttribute("sourceAsset", assetService.getById(Integer.parseInt(id)));
         model.addAttribute("transaction", new Transaction());

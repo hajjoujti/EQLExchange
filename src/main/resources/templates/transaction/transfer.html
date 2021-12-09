@@ -5,21 +5,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Transfer From Wallet To Wallet</title>
+    <link rel="stylesheet" href="/css/trade.css">
 </head>
 <body>
 <div layout:fragment="content">
-    <form method="post" th:action="@{/wallet/save-transaction}">
-        <input type="hidden" th:field="${sourceAsset.id}"/>
-        <div>
-            <label>Wallet Address :</label>
-            <input type="text" th:field="${targetUser.walletAddress}"/>
+
+    <h1 class="title-page"> Transfer </h1>
+
+    <div class="trade-and-chart">
+        <div class="trade-container">
+            <div class="title-trade">
+                <h3>Transfer</h3>
+                <span>Transfer wallet to wallet</span>
+                <hr/>
+            </div>
+
+            <form method="post" th:action="@{/wallet/save-transaction}">
+                <input type="hidden" th:field="${sourceAsset.id}"/>
+
+                <div class="mb-3">
+                    <input type="number" step="any" min="0" th:max="${sourceAsset.balance}"
+                           th:field="${transaction.amount}" class="form-control"/>
+                    <p style="color: red"
+                       th:text="'Max : ' + ${sourceAsset.balance} + ' ' + ${sourceAsset.currency.ticker}"></p>
+                </div>
+
+                <div class="logo-to">
+                    <i class="fa fa-solid fa-arrow-down"></i>
+                </div>
+
+                <div id="just-margin">
+                    <div class="mb-3">
+                        <input type="text" placeholder="Wallet adress" class="form-control"
+                               th:field="${targetUser.walletAddress}" onchange="calcul()">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+
         </div>
-        <div>
-            <label th:text="'Amount: should be less than or equal to ' + ${sourceAsset.balance} + ' ' + ${sourceAsset.currency.ticker}"></label>
-            <input type="number" step="any" min="0" th:max="${sourceAsset.balance}" th:field="${transaction.amount}"/>
+        <div class="chart-description">
+            <div class="asset-title">
+                <div>
+                    <img class="asset-logo" th:src="@{'/img/' + ${sourceAsset.currency.ticker.toLowerCase()} +'.png'}"/>
+                </div>
+
+                <div class="asset-description">
+                    <div>
+                        <h2 th:text="${sourceAsset.currency.ticker.toUpperCase()}" class="asset-detail-ticker"></h2>
+                    </div>
+                    <div class="asset-description-container">
+                        <span class="asset-detail-name" th:text="${ '(' + sourceAsset.currency.name + ')'}"></span>
+                        <p class="asset-contract"
+                           th:text="${'Token contract : ' + sourceAsset.currency.contractAddress}"></p>
+                    </div>
+                </div>
+            </div>
+            <canvas id="myChart" class="chart-currency"></canvas>
         </div>
-        <button type="submit">Send</button>
-    </form>
+
+    </div>
 </div>
 </body>
 </html>
