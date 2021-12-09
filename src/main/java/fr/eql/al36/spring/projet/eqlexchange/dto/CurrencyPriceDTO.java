@@ -11,7 +11,7 @@ public class CurrencyPriceDTO {
     private LocalDateTime dateTime;
 
 
-    public CurrencyPriceDTO(double price, LocalDateTime dateTime) {
+    private CurrencyPriceDTO(double price, LocalDateTime dateTime) {
         this.price = price;
         this.dateTime = dateTime;
     }
@@ -26,7 +26,7 @@ public class CurrencyPriceDTO {
     }
 
 
-    public CurrencyPriceDTO toDto(CurrencyPrice currencyPrice){
+    public static CurrencyPriceDTO toDto(CurrencyPrice currencyPrice){
         return new CurrencyPriceDTO(currencyPrice.getPrice(), currencyPrice.getDateTime());
     }
 

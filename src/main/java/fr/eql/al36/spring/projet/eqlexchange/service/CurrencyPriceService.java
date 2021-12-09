@@ -37,7 +37,7 @@ public class CurrencyPriceService {
     public String getCurrencyPricesJSON(Currency currency) {
         List<CurrencyPriceDTO> currencyPriceDTOS = new ArrayList<>();
         for(CurrencyPrice currencyPrice : getPricesOfCurrency(currency)) {
-            currencyPriceDTOS.add(new CurrencyPriceDTO(currencyPrice.getPrice(), currencyPrice.getDateTime()));
+            currencyPriceDTOS.add(CurrencyPriceDTO.toDto(currencyPrice));
         }
         return new Gson().toJson(currencyPriceDTOS);
     }
