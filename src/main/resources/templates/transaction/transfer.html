@@ -8,15 +8,15 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <form method="post" th:action="@{'/wallet/save-transaction'}">
+    <form method="post" th:action="@{/wallet/save-transaction}">
         <input type="hidden" th:field="${sourceAsset.id}"/>
         <div>
             <label>Wallet Address :</label>
             <input type="text" th:field="${targetUser.walletAddress}"/>
         </div>
         <div>
-            <label th:text="'Amount: should be less than or equal to ' + ${sourceAsset.balance}"></label>
-            <input type="number" min="0" th:max="${sourceAsset.balance}" th:field="${transaction.amount}"/>
+            <label th:text="'Amount: should be less than or equal to ' + ${sourceAsset.balance} + ' ' + ${sourceAsset.currency.ticker}"></label>
+            <input type="number" step="any" min="0" th:max="${sourceAsset.balance}" th:field="${transaction.amount}"/>
         </div>
         <button type="submit">Send</button>
     </form>
