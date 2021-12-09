@@ -168,7 +168,7 @@ public class BootStrapData implements CommandLineRunner {
         User robert = userRepository.save(User.builder().firstName("Robert").lastName("Pushard").username(
                 "pusher_bobby").dateOfBirth(LocalDate.of(1956, 11, 8)).email("pouchard11@numericable.fr").password(
                 passwordEncoder.encode("jesusmarietf1")).walletAddress(
-                "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D7").authorities(userSet).build());
+                "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D9").authorities(userSet).build());
 
         ////////////////////////////////
         // ASSETS
