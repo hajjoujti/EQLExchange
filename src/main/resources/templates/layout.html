@@ -10,10 +10,35 @@
 <div layout:insert="aside"></div>
 <div layout:insert="footer"></div>
 
-<script>
+<script th:inline="javascript">
 
-    var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-    var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+    var data = [[${currencyPricesJSON}]];
+    const dataJSON = JSON.parse(data);
+
+    var xValues = [];
+    var yValues = [];
+    var dateTime;
+    var year, month, day, hour, minutes, seconds;
+    var today = new Date();
+
+    dataJSON.forEach(function(priceAndDate){
+        year = priceAndDate.dateTime.date.year;
+        month = priceAndDate.dateTime.date.month - 1;
+        day = priceAndDate.dateTime.date.day;
+        hour = priceAndDate.dateTime.time.hour;
+        minutes = priceAndDate.dateTime.time.minute;
+        seconds = priceAndDate.dateTime.time.second;
+        dateTime = new Date(year,month,day,hour,minutes,seconds);
+        if(dateTime.getDate() == today.getDate()) {
+            xValues.push(dateTime.toLocaleTimeString());
+        } else {
+            xValues.push(dateTime.toLocaleString());
+        }
+        yValues.push(priceAndDate.price);
+    });
+
+
+
 
     new Chart("myChart", {
         type: "line",
@@ -30,7 +55,7 @@
         options: {
             legend: {display: false},
             scales: {
-                yAxes: [{ticks: {min: 6, max: 16}}],
+                yAxes: [{ticks: {min: 0}}],
             }
         }
     });
