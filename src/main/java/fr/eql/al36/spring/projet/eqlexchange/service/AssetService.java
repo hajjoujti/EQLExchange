@@ -81,4 +81,11 @@ public class AssetService {
         result =  currencyPrice * currencySupply;
         return result;
     }
+
+    public Asset findAssetByUserAndCurrency(User user, Currency currency){
+        if(assetRepository.findByUserAndCurrency(user, currency).isPresent()){
+            return assetRepository.findByUserAndCurrency(user, currency).get();
+        }
+        return null;
+    }
 }
