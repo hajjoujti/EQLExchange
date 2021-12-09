@@ -13,5 +13,7 @@ public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
     @Query("SELECT c FROM Currency c WHERE c.id <> :id ORDER BY c.ticker ASC")
     List<Currency> getAllExceptOneWithId(@Param("id") Integer id);
 
+    Currency findByTicker(String ticker);
+
     List<Currency> getCurrenciesByCurrencyTypeOrderByNameAsc(CurrencyType currencyType);
 }

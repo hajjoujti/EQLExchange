@@ -114,3 +114,99 @@
     width: 500px !important;
     height: 270px !important;
 }
+
+.dashboard-container {
+    color: white;
+    display: flex;
+}
+
+.dashboard-container-each {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-container .btn-container {
+    flex-direction: column;
+}
+
+.dashboard-container .asset-detail-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.assets-container {
+    display: flex;
+    flex-direction: row;
+    margin: 15px;
+    border-bottom: 1px solid #3d5170;
+    width: 400px;
+}
+.asset-container {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+    width: 351px;
+}
+
+.container-assets {
+    padding: 20px 20px 90px 20px;
+}
+.asset-value {
+    color: #727272;
+    font-size: 15px;
+}
+
+.asset-balance {
+    margin-bottom: 0px !important;
+}
+.asset-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 20%;
+}
+
+.info-icon {
+    font-size: 25px;
+}
+
+#eboard {
+    color: white;
+    padding: 30px 0 30px 3px;
+    margin-left: 30px;
+}
+
+.dashboard-container .btn-container {
+    flex-direction: row;
+}
+
+.dashboard-container .price-currency {
+    text-align: right;
+    font-weight: bold;
+    color: #17c671!important;
+    font-size: 2rem;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.currency-block {
+    padding: 0 0 30px 0;
+    padding: 10px;
+}
+
+.dashboard-container .asset-description {
+    width: 100%;
+}
+
+.dashboard-container .asset-detail-container {
+   padding:  0 46px 0px 45px;
+}
+
+.xql-and-asset {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+}
+
+.title-block {
+    padding: 10px;
+}

@@ -44,27 +44,22 @@ public class TransactionService {
         this.currencyPriceService = currencyPriceService;
     }
 
-    /*
-    public List<Transaction> getTransactionsDoneByUser(User user) {
+public List<Transaction> getTransactionsDoneByUser(User user) {
         List<Asset> assets = assetRepository.getAllByUser(user);
-        List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
-        return transactionRepository.findAllByTradeOrders(tradeOrders);
+        return transactionRepository.findAllByAssets(assets);
     }
 
+
     public List<Transaction> getTransactionsByAsset(Asset asset) {
-        List<Asset> assets = new ArrayList<>();
-        assets.add(asset);
-        List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
-        return transactionRepository.findAllByTradeOrders(tradeOrders);
+        return transactionRepository.findAllByAsset(asset);
     }
 
 
     public List<Transaction> getTransactionsDoneOnCurrency(Currency currency) {
         List<Asset> assets = assetRepository.getAllByCurrency(currency);
-        List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
-        return transactionRepository.findAllByTradeOrders(tradeOrders);
+        return transactionRepository.findAllByAssets(assets);
     }
-*/
+
     public void execute(TradeOrder tradeOrder1, TradeOrder tradeOrder2) {
 
         System.out.println("entered execute");

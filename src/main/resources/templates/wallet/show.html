@@ -13,8 +13,8 @@
         <div class="ecoin">
 
             <h1>Wallet</h1>
-            <h2 th:text="${user.walletAddress.substring(0, 8) + '...' + user.walletAddress.substring((user.walletAddress.length() - 5), (user.walletAddress.length() - 1))  }"></h2>
-            <h2 th:text="${#numbers.formatDecimal(user.totalAssetsValue(assets), 1, 2)} + '$'"></h2>
+            <h2 th:text="${sessionUser.walletAddress.substring(0, 8) + '...' + sessionUser.walletAddress.substring((sessionUser.walletAddress.length() - 5), (sessionUser.walletAddress.length() - 1))  }"></h2>
+            <h2 th:text="${#numbers.formatDecimal(sessionUser.totalAssetsValue(assets), 1, 2)} + '$'"></h2>
 
 
             <div class="container-assets">
