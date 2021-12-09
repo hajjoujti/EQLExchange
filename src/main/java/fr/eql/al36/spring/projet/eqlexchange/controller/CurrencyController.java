@@ -2,6 +2,7 @@ package fr.eql.al36.spring.projet.eqlexchange.controller;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
 import fr.eql.al36.spring.projet.eqlexchange.domain.User;
+import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyPriceService;
 import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyService;
 import fr.eql.al36.spring.projet.eqlexchange.service.TransactionService;
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,14 @@ public class CurrencyController {
 
     private final TransactionService transactionService;
     private final CurrencyService currencyService;
+    private final CurrencyPriceService currencyPriceService;
 
 
-    public CurrencyController(TransactionService transactionService, CurrencyService currencyService) {
+    public CurrencyController(TransactionService transactionService, CurrencyService currencyService,
+                              CurrencyPriceService currencyPriceService) {
         this.transactionService = transactionService;
         this.currencyService = currencyService;
+        this.currencyPriceService = currencyPriceService;
     }
 
     @GetMapping("currency/{id}/details")
@@ -33,6 +37,8 @@ public class CurrencyController {
         }
         model.addAttribute("currency", currency);
         model.addAttribute("connectedUser", connectedUser);
+        model.addAttribute("transactions", transactionService.getTransactionsDoneOnCurrency(currency));
+        model.addAttribute("currencyPricesJSON", currencyPriceService.getCurrencyPricesJSON(currency));
         //model.addAttribute("transactions", transactionService.getTransactionsDoneOnCurrency(currency));
         return "currency/details";
     }

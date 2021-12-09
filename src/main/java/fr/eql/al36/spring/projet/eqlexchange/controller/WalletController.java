@@ -1,9 +1,7 @@
 package fr.eql.al36.spring.projet.eqlexchange.controller;
 
+import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
 import fr.eql.al36.spring.projet.eqlexchange.domain.User;
-import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
-import fr.eql.al36.spring.projet.eqlexchange.repository.TransactionRepository;
-import fr.eql.al36.spring.projet.eqlexchange.repository.UserRepository;
 import fr.eql.al36.spring.projet.eqlexchange.service.AssetService;
 import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyPriceService;
 import org.springframework.stereotype.Controller;
@@ -17,16 +15,10 @@ import javax.servlet.http.HttpSession;
 public class WalletController {
 
     private final AssetService assetService;
-    private final TradeOrderRepository tradeOrderRepository;
-    private final TransactionRepository transactionRepository;
-    private final UserRepository userRepository;
     private final CurrencyPriceService currencyPriceService;
 
-    public WalletController(AssetService assetService, TradeOrderRepository tradeOrderRepository, TransactionRepository transactionRepository, UserRepository userRepository, CurrencyPriceService currencyPriceService) {
+    public WalletController(AssetService assetService, CurrencyPriceService currencyPriceService) {
         this.assetService = assetService;
-        this.tradeOrderRepository = tradeOrderRepository;
-        this.transactionRepository = transactionRepository;
-        this.userRepository = userRepository;
         this.currencyPriceService = currencyPriceService;
     }
 
@@ -46,10 +38,12 @@ public class WalletController {
     @GetMapping("wallet/{id}")
     public String displayAsset(Model model, HttpSession session, @PathVariable String id) {
         User connectedUser = (User) session.getAttribute("sessionUser");
-        Double marketCap = assetService.calculMarketCap(assetService.getById(Integer.parseInt(id)).getCurrency());
+        Currency currency = assetService.getById(Integer.parseInt(id)).getCurrency();
+        Double marketCap = assetService.calculMarketCap(currency);
         model.addAttribute("asset", assetService.getById(Integer.parseInt(id)));
         model.addAttribute("sessionUser", connectedUser);
         model.addAttribute("marketcap", marketCap);
+        model.addAttribute("currencyPricesJSON", currencyPriceService.getCurrencyPricesJSON(currency));
         return "wallet/details";
     }
 }
