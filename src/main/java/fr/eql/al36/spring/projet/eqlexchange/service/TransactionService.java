@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,48 +22,42 @@ public class TransactionService {
     private final double MAX_SLIPPAGE_RATE = .97;
 
     private final AssetService assetService;
+
     private final TradeOrderService tradeOrderService;
+
     private final TransactionRepository transactionRepository;
-    private final TradeOrderRepository tradeOrderRepository;
+
     private final AssetRepository assetRepository;
-    private final CurrencyPriceRepository currencyPriceRepository;
-    private final CurrencyPriceService currencyPriceService;
 
 
     public TransactionService(AssetService assetService, TradeOrderService tradeOrderService,
-                              TransactionRepository transactionRepository, TradeOrderRepository tradeOrderRepository,
-                              AssetRepository assetRepository, CurrencyPriceRepository currencyPriceRepository, CurrencyPriceService currencyPriceService) {
+                              TransactionRepository transactionRepository,
+                              AssetRepository assetRepository) {
 
         this.assetService = assetService;
         this.tradeOrderService = tradeOrderService;
         this.transactionRepository = transactionRepository;
-        this.tradeOrderRepository = tradeOrderRepository;
         this.assetRepository = assetRepository;
-        this.currencyPriceRepository = currencyPriceRepository;
-        this.currencyPriceService = currencyPriceService;
     }
 
-    /*
+
     public List<Transaction> getTransactionsDoneByUser(User user) {
         List<Asset> assets = assetRepository.getAllByUser(user);
-        List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
-        return transactionRepository.findAllByTradeOrders(tradeOrders);
+        return transactionRepository.findAllByAssets(assets);
     }
 
+
     public List<Transaction> getTransactionsByAsset(Asset asset) {
-        List<Asset> assets = new ArrayList<>();
-        assets.add(asset);
-        List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
-        return transactionRepository.findAllByTradeOrders(tradeOrders);
+        return transactionRepository.findAllByAsset(asset);
     }
 
 
     public List<Transaction> getTransactionsDoneOnCurrency(Currency currency) {
         List<Asset> assets = assetRepository.getAllByCurrency(currency);
-        List<TradeOrder> tradeOrders = tradeOrderRepository.getAllByAssetIn(assets);
-        return transactionRepository.findAllByTradeOrders(tradeOrders);
+        return transactionRepository.findAllByAssets(assets);
     }
-*/
+
+
     public void execute(TradeOrder tradeOrder1, TradeOrder tradeOrder2) {
 
         System.out.println("entered execute");
@@ -84,7 +77,7 @@ public class TransactionService {
         System.out.println("execute: tradeOrder2 amount to sell:" + tradeOrder2.getAmountToSell());
         System.out.println("-----------------------------------------------------");
         if(tradeOrder1.getCurrencyToBuy().getId() != tradeOrder2.getCurrencyToSell().getId()
-                || tradeOrder1.getCurrencyToSell().getId() != tradeOrder2.getCurrencyToBuy().getId()) {
+           || tradeOrder1.getCurrencyToSell().getId() != tradeOrder2.getCurrencyToBuy().getId()) {
             System.out.println("couille dans le paté");
             System.out.println("tradeOrder1.getCurrencyToBuy().getId() : " + tradeOrder1.getCurrencyToBuy().getId());
             System.out.println("tradeOrder2.getCurrencyToSell().getId() : " + tradeOrder2.getCurrencyToSell().getId());
@@ -95,13 +88,13 @@ public class TransactionService {
         System.out.println("execute: orders currencies match");
 
         boolean isEven = false;
-        if (tradeOrder1.getAmountToBuy() / tradeOrder2.getAmountToSell() >= MAX_SLIPPAGE_RATE
-                && tradeOrder2.getAmountToBuy() / tradeOrder1.getAmountToSell() >= MAX_SLIPPAGE_RATE) {
+        if(tradeOrder1.getAmountToBuy() / tradeOrder2.getAmountToSell() >= MAX_SLIPPAGE_RATE
+           && tradeOrder2.getAmountToBuy() / tradeOrder1.getAmountToSell() >= MAX_SLIPPAGE_RATE) {
             isEven = true;
         }
 
         double amount;
-        if (isEven) {
+        if(isEven) {
             amount = tradeOrder1.getAmountToSell();
         } else {
             amount = (Math.min(tradeOrder1.getAmountToBuy(), tradeOrder2.getAmountToSell()));
@@ -111,8 +104,8 @@ public class TransactionService {
         User tradeOrder2User = tradeOrder2.getUser();
 
         Currency currency = tradeOrder1.getCurrencyToSell();
-        Asset sourceAsset = assetService.getByUserAndCurrency(tradeOrder1User,currency);
-        Asset targetAsset = assetService.getByUserAndCurrency(tradeOrder2User,currency);
+        Asset sourceAsset = assetService.getByUserAndCurrency(tradeOrder1User, currency);
+        Asset targetAsset = assetService.getByUserAndCurrency(tradeOrder2User, currency);
         assetService.creditFromSourceAsset(targetAsset, sourceAsset, amount);
         Transaction transaction = Transaction.builder()
                 .sourceAsset(sourceAsset)
@@ -123,14 +116,14 @@ public class TransactionService {
         transaction.setTxId("tx_" + transaction.hashCode());
         transactionRepository.save(transaction);
 
-        if (isEven) {
+        if(isEven) {
             amount = tradeOrder2.getAmountToSell();
         } else {
             amount = (Math.min(tradeOrder2.getAmountToBuy(), tradeOrder1.getAmountToSell()));
         }
         currency = tradeOrder2.getCurrencyToSell();
-        sourceAsset = assetService.getByUserAndCurrency(tradeOrder2User,currency);
-        targetAsset = assetService.getByUserAndCurrency(tradeOrder1User,currency);
+        sourceAsset = assetService.getByUserAndCurrency(tradeOrder2User, currency);
+        targetAsset = assetService.getByUserAndCurrency(tradeOrder1User, currency);
         assetService.creditFromSourceAsset(targetAsset, sourceAsset, tradeOrder2.getAmountToSell());
         transaction = Transaction.builder()
                 .sourceAsset(sourceAsset)
@@ -141,26 +134,28 @@ public class TransactionService {
         transaction.setTxId("tx_" + transaction.hashCode());
         transactionRepository.save(transaction);
 
-        if (!isEven) {
+        if(!isEven) {
             TradeOrder biggerTradeOrder;
             TradeOrder smallerTradeOrder;
-            if (tradeOrder1.getAmountToBuy() > tradeOrder2.getAmountToSell()) {
+            if(tradeOrder1.getAmountToBuy() > tradeOrder2.getAmountToSell()) {
                 biggerTradeOrder = tradeOrder1;
                 smallerTradeOrder = tradeOrder2;
-            }
-            else {
+            } else {
                 biggerTradeOrder = tradeOrder2;
                 smallerTradeOrder = tradeOrder1;
             }
 
             tradeOrderService.place(TradeOrder.builder()
-                    .user(biggerTradeOrder.getUser())
-                    .currencyToBuy(biggerTradeOrder.getCurrencyToBuy())
-                    .currencyToSell(biggerTradeOrder.getCurrencyToSell())
-                    .amountToBuy(biggerTradeOrder.getAmountToBuy() - smallerTradeOrder.getAmountToSell())
-                    .amountToSell(biggerTradeOrder.getAmountToSell() - smallerTradeOrder.getAmountToBuy())
-                    .creationDate(LocalDateTime.now())
-                    .build());
+                                            .user(biggerTradeOrder.getUser())
+                                            .currencyToBuy(biggerTradeOrder.getCurrencyToBuy())
+                                            .currencyToSell(biggerTradeOrder.getCurrencyToSell())
+                                            .amountToBuy(biggerTradeOrder.getAmountToBuy() -
+                                                         smallerTradeOrder.getAmountToSell())
+                                            .amountToSell(biggerTradeOrder.getAmountToSell() -
+                                                          smallerTradeOrder.getAmountToBuy())
+                                            .creationDate(LocalDateTime.now())
+                                            .build());
         }
     }
+
 }
