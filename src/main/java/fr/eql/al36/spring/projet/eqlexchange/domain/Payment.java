@@ -14,6 +14,13 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private double amount;
+    private String card;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
+
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private Asset asset;
@@ -23,11 +30,11 @@ public class Payment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return Objects.equals(id, payment.id) && Objects.equals(asset, payment.asset);
+        return Objects.equals(id, payment.id) && Objects.equals(currency, payment.currency);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, asset);
+        return Objects.hash(id, currency);
     }
 }

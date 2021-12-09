@@ -11,10 +11,12 @@ public class CurrencyService {
 
     private final CurrencyRepository currencyRepository;
     private final CurrencyPriceService currencyPriceService;
+    private final CurrencyTypeService currencyTypeService;
 
-    public CurrencyService(CurrencyRepository currencyRepository, CurrencyPriceService currencyPriceService) {
+    public CurrencyService(CurrencyRepository currencyRepository, CurrencyPriceService currencyPriceService, CurrencyTypeService currencyTypeService) {
         this.currencyRepository = currencyRepository;
         this.currencyPriceService = currencyPriceService;
+        this.currencyTypeService = currencyTypeService;
     }
 
 
@@ -42,4 +44,10 @@ public class CurrencyService {
         double inputCurrencyValue = currencyPriceService.getLatestPriceOFCurrency(inputCurrency).getPrice();
         return inputCurrencyValue * inputAmount / outputCurrencyValue;
     }
+
+    public List<Currency> getFiatCurrencies() {
+        return currencyRepository.getCurrenciesByCurrencyTypeOrderByNameAsc(currencyTypeService.getByName("fiat"));
+    }
+
+
 }

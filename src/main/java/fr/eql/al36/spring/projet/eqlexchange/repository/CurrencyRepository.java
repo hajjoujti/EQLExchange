@@ -1,6 +1,7 @@
 package fr.eql.al36.spring.projet.eqlexchange.repository;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
+import fr.eql.al36.spring.projet.eqlexchange.domain.CurrencyType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,5 @@ public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
 
     Currency findByTicker(String ticker);
 
+    List<Currency> getCurrenciesByCurrencyTypeOrderByNameAsc(CurrencyType currencyType);
 }

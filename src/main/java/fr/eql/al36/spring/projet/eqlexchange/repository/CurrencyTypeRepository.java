@@ -5,4 +5,6 @@ import fr.eql.al36.spring.projet.eqlexchange.domain.Payment;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CurrencyTypeRepository extends CrudRepository<CurrencyType, Integer> {
+
+    public CurrencyType findByName(String name);
 }
