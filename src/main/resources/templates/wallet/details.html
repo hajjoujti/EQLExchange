@@ -49,9 +49,9 @@
                             th:text="${ '$' + asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></h3>
                     </div>
                     <div class="token-infos">
-                        <span class="token-title-info">Total liquidity :</span>
+                        <span class="token-title-info">Maximum liquidity :</span>
                         <span class="currency-details"
-                              th:text="${asset.currency.maximumSupply}"></span>
+                              th:text="${asset.currency.maximumSupply > 0 ? asset.currency.maximumSupply : 'Unlimited'}"></span>
                         <span class="token-title-info">Cirulating supply :</span>
                         <span class="currency-details" th:text="${asset.currency.circulatingSupply}"></span>
                         <span class="token-title-info">Market Cap :</span>
@@ -70,8 +70,8 @@
             <tr>
                 <th scope="col">Date</th>
                 <th scope="col">Action</th>
-                <th th:text="${asset.currency.name + ' Price'}" scope="col"></th>
-                <th th:text=" ${asset.currency.name + ' Amount'} " scope="col"></th>
+                <th th:text="${asset.currency.name + ' amount'}" scope="col"></th>
+                <th th:text=" ${asset.currency.name + ' price'} " scope="col"></th>
                 <th scope="col">Total USD</th>
                 <th scope="col">Txn Hash</th>
             </tr>
@@ -79,13 +79,14 @@
             <tbody>
             <tr th:each="transaction : ${transactions}">
                 <th scope="row" th:text="${transaction.date.toString.replace('T', ' ')}"></th>
-                <td th:if="${transaction.tradeOrder1.currency.equals(asset.currency)}" style="color: red">Sell</td>
-                <td th:unless="${transaction.tradeOrder1.currency.equals(asset.currency)}" style="color: #28a745">
+                <td th:if="${transaction.sourceAsset.id.equals(asset.id)}" style="color: red">Sell</td>
+                <td th:unless="${transaction.sourceAsset.id.equals(asset.id)}" style="color: #28a745">
                     Buy
                 </td>
-                <td th:text="${transaction.tradeOrder1.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></td>
-                <td th:text="${transaction.tradeOrder1.amount}"></td>
-                <td th:text="${transaction.tradeOrder1.amount * (asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price)     }"></td>
+                <td th:if="${transaction.sourceAsset.id.equals(asset.id)}" th:text="${'-' + transaction.amount}" style="color: red"></td>
+                <td  th:unless="${transaction.sourceAsset.id.equals(asset.id)}" th:text="${'+' + transaction.amount}" style="color: #28a745"></td>
+                <td th:text="${asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></td>
+                <td th:text="${transaction.amount * (asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price)     }"></td>
                 <th scope="row" th:text="${transaction.txId}"></th>
             </tr>
             </tbody>
