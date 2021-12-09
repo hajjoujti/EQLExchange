@@ -39,7 +39,7 @@
                     </div>
                     <a href="#" th:href="@{'/trade/buy/' + ${asset.currency.id}}"><button class="buy-btn">Buy</button></a>
                     <button class="sell-btn">Sell</button>
-                    <button class="transfert-btn">Transfer</button>
+                    <a href="#" th:href="@{'/wallet/' + ${asset.id} + '/transfer'}"><button class="buy-btn">Transfer</button></a>
                 </div>
 
                 <div class="currency-detail-container">
