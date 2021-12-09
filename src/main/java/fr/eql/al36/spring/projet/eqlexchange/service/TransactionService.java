@@ -231,7 +231,7 @@ public class TransactionService {
         sourceAsset.setBalance(sourceAsset.getBalance() - transaction.getAmount());
         assetRepository.save(sourceAsset);
 
-        targetAsset.setBalance(sourceAsset.getBalance() + transaction.getAmount());
+        targetAsset.setBalance(targetAsset.getBalance() + transaction.getAmount());
         assetRepository.save(targetAsset);
 
         transaction = Transaction.builder()
@@ -241,6 +241,7 @@ public class TransactionService {
                 .date(LocalDateTime.now())
                 .build();
         transaction.setTxId("tx_" + transaction.hashCode());
+        transactionRepository.save(transaction);
         return transaction;
     }
 
