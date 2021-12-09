@@ -2,6 +2,7 @@ package fr.eql.al36.spring.projet.eqlexchange.controller;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.Currency;
 import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
+import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
 import fr.eql.al36.spring.projet.eqlexchange.domain.User;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyRepository;
@@ -27,18 +28,20 @@ public class TradeOrderController {
     private final CurrencyService currencyService;
     private final TradeOrderService tradeOrderService;
     private final TransactionService transactionService;
+    private final CurrencyPriceService currencyPriceService;
     private final AssetRepository assetRepository;
     private final AssetService assetService;
 
     public TradeOrderController(TradeOrderRepository tradeOrderRepository,
                                 CurrencyRepository currencyRepository,
-                                CurrencyService currencyService, TradeOrderService tradeOrderService, TransactionService transactionService, AssetRepository assetRepository, AssetService assetService) {
+                                CurrencyService currencyService, TradeOrderService tradeOrderService, TransactionService transactionService, CurrencyPriceService currencyPriceService, AssetRepository assetRepository, AssetService assetService) {
 
         this.tradeOrderRepository = tradeOrderRepository;
         this.currencyRepository = currencyRepository;
         this.currencyService = currencyService;
         this.tradeOrderService = tradeOrderService;
         this.transactionService = transactionService;
+        this.currencyPriceService = currencyPriceService;
         this.assetRepository = assetRepository;
         this.assetService = assetService;
     }
@@ -47,7 +50,7 @@ public class TradeOrderController {
     public String trade(Model model, @PathVariable String id1, HttpSession session) {
         User connectedUser = (User) session.getAttribute("sessionUser");
         Currency currencyToBuy = currencyRepository.findById(Integer.parseInt(id1)).get();
-
+        model.addAttribute("currencyPricesJSON", currencyPriceService.getCurrencyPricesJSON(currencyToBuy));
         System.out.println("currency to buy: " + currencyToBuy.getTicker());
         model.addAttribute("currencyToSell",currencyService.findCurrencyById(3));
         model.addAttribute("currenciesToSell",currencyService.getAllExceptOneWithId(currencyToBuy.getId()));
@@ -65,27 +68,20 @@ public class TradeOrderController {
 
         Currency currencyToBuy = currencyService.findCurrencyById(idCurrencyToBuy);
         tradeOrder.setCurrencyToBuy(currencyToBuy);
-        System.out.println("PostMapping: currency to buy: " + tradeOrder.getCurrencyToBuy().getTicker());
-
-        System.out.println("PostMapping: currency to sell :" + tradeOrder.getCurrencyToSell().getTicker());
-        System.out.println("PostMapping: amount to sell :" + tradeOrder.getAmountToSell());
         Currency currencyToSell = tradeOrder.getCurrencyToSell();
 
         tradeOrder.setUser(connectedUser);
         tradeOrder.setAmountToBuy(currencyService.getCurrencyAmountIn(currencyToBuy,currencyToSell, tradeOrder.getAmountToSell()));
-        System.out.println("PostMapping: amount to buy :" + tradeOrder.getAmountToBuy());
         tradeOrder.setCreationDate(LocalDateTime.now());
         tradeOrder = tradeOrderService.place(tradeOrder);
         List<TradeOrder> matchingTradeOrders = tradeOrderService.match(tradeOrder);
 
         if (matchingTradeOrders.size() > 0) {
-            System.out.println("Matches:");
             for (TradeOrder matchingTradeOrder : matchingTradeOrders) {
                 System.out.println("maaatch: " + matchingTradeOrder.getId());
             }
 
             TradeOrder selectedTradeOrder = tradeOrderService.selectBestAmong(tradeOrder, matchingTradeOrders);
-            System.out.println("selected: " + selectedTradeOrder.getId());
             transactionService.executeFromTradeOrders(tradeOrder, selectedTradeOrder);
         }
 

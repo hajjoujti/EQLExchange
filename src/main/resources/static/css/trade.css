@@ -1,0 +1,103 @@
+.trade-container {
+    color: white;
+    padding: 30px;
+    justify-content: center;
+    width: 500px;
+}
+
+.title-trade {
+    text-align: center;
+}
+
+.logo-to {
+    text-align: center;
+}
+
+.logo-to .fa {
+    font-size: 20px;
+    padding: 11px;
+    background-color: white;
+    color: black;
+    border-radius: 68%;
+}
+
+.asset-description {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+}
+
+.asset-logo {
+    height: 50px;
+    width: 50px;
+    margin-top: 5px;
+}
+
+.asset-title {
+    display: flex;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+.asset-detail-ticker {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 0px !important;
+}
+
+.asset-contract {
+    color: #818ea3!important;
+    font-size: 13px;
+    padding: 5px;
+}
+
+.asset-detail-name {
+    font-size: 1rem;
+}
+
+.select-container {
+    background-color: #0b1217;
+    color: white;
+    border: none;
+}
+
+.btn-primary {
+    justify-content: center;
+    background-color: #28a745 !important;
+    margin-top: 30px;
+    width: 100%;
+    border-color: #28a745 !important;
+}
+
+.btn-primary:hover {
+    background-color: green !important;
+    border-color: green !important;
+}
+
+.title-page {
+    padding: 50px 0 0 50px;
+    color: white;
+}
+
+.trade-and-chart {
+    display: flex;
+    border: 1px solid white;
+    margin: 100px;
+    border-radius: 1%;
+}
+
+.chart-currency {
+    width: 500px !important;
+    height: 270px !important;
+}
+
+.asset-description-container {
+    display: flex;
+}
+
+.chart-description {
+    padding: 16px;
+    color: white;
+}
+
+

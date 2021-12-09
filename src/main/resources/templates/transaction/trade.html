@@ -5,40 +5,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Trade Cryptocurrency</title>
+    <link rel="stylesheet" href="/css/trade.css">
 </head>
 <body>
 <div layout:fragment="content">
-    <h1 th:text="${'Buy ' + tradeOrder.currencyToBuy.ticker}"></h1>
 
-<div>
-    PRICE CHART
-</div>
-    <div>
-        <ul>
-            <li th:text="${'Your ' + tradeOrder.currencyToBuy.ticker + 'balance: ' + 'xxx' + tradeOrder.currencyToBuy.ticker}"></li>
-        </ul>
-        <form th:object="${tradeOrder}" method="post" th:action="@{'/trade/place'}">
-        <input type="hidden" th:value="${tradeOrder.currencyToBuy.id}" name="idCurrencyToBuy" />
+    <h1 class="title-page"> Exchange </h1>
 
-
-            Buy <b th:text="${tradeOrder.currencyToBuy.ticker}"></b> with
-
-            <select th:field="*{currencyToSell}">
-                <option th:each="i : ${currenciesToSell}" th:text="${i.ticker}" th:value="${i.id}"></option>
-            </select>
-            <input type="hidden" th:value="${currencyToSell.id}" name="idCurrencyToSell" />
-
-            <div>
-                <label th:text="${'Amount of ' + currencyToSell.ticker} + ':'"></label>
-                <input type="text" th:field="*{amountToSell}" />
+    <div class="trade-and-chart">
+        <div class="trade-container">
+            <div class="title-trade">
+                <h3>Trade</h3>
+                <span>Trade tokens in an instant</span>
+                <hr/>
             </div>
-            <div>
-                <label th:text="${'Will get you in ' + tradeOrder.currencyToBuy.ticker} + ':'"></label>
-                <label th:name="amountToBuy" th:value="xxx" th:onchange=""></label>
+
+            <form th:object="${tradeOrder}" method="post" th:action="@{'/trade/place'}">
+                <div class="mb-3">
+                    <select class="select-container" th:field="*{currencyToSell}">
+                        <option th:each="i : ${currenciesToSell}" th:text="${i.ticker}" th:value="${i.id}"></option>
+                    </select>
+                    <input type="text" class="form-control" id="tobuy" th:field="*{amountToSell}" onchange="calcul()">
+                </div>
+
+                <div class="logo-to">
+                    <i class="fa fa-solid fa-arrow-down"></i>
+                </div>
+
+                <div class="asset-title">
+                    <div>
+                        <img class="asset-logo"
+                             th:src="@{'/img/' + ${tradeOrder.currencyToBuy.ticker.toLowerCase()} +'.png'}"/>
+                    </div>
+
+                    <div class="asset-description">
+                        <div>
+                            <h2 th:text="${tradeOrder.currencyToBuy.ticker.toUpperCase()}"
+                                class="asset-detail-ticker"></h2>
+                        </div>
+                        <div class="asset-description-container">
+                            <span class="asset-detail-name"
+                                  th:text="${ '(' + tradeOrder.currencyToBuy.name + ')'}"></span>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" th:value="${tradeOrder.currencyToBuy.id}" name="idCurrencyToBuy"/>
+                <input type="hidden" th:value="${currencyToSell.id}" name="idCurrencyToSell"/>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div>
+        <div class="chart-description">
+            <div class="asset-title">
+                <div>
+                    <img class="asset-logo" th:src="@{'/img/' + ${tradeOrder.currencyToBuy.ticker.toLowerCase()} +'.png'}"/>
+                </div>
+
+                <div class="asset-description">
+                    <div>
+                        <h2 th:text="${tradeOrder.currencyToBuy.ticker.toUpperCase()}" class="asset-detail-ticker"></h2>
+                    </div>
+                    <div class="asset-description-container">
+                        <span class="asset-detail-name" th:text="${ '(' + tradeOrder.currencyToBuy.name + ')'}"></span>
+                        <p class="asset-contract" th:text="${'Token contract : ' + tradeOrder.currencyToBuy.contractAddress}"></p>
+                    </div>
+                </div>
             </div>
-            <button type="submit" th:text="${'Buy XXX ' + tradeOrder.currencyToBuy.ticker + ' with ' + 'XXX' + ' ' + currencyToSell.ticker}"></button>
-    </form>
-    </div>
+            <canvas id="myChart" class="chart-currency"></canvas>
+        </div>
+
+    <script>
+
+        function calcul() {
+            var tobuy = document.getElementById('tobuy').value;
+
+            var multiple = document.getElementById('valeur').value;
+            var result = tobuy * multiple;
+            console.log(result)
+            return result;
+        }
+    </script>
 </div>
+
 </body>
 </html>
