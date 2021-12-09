@@ -38,8 +38,8 @@
                               th:text="${ '≈ ' + ((asset.balance) * (asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price)) + '$'}"></span>
                     </div>
                     <a href="#" th:href="@{'/trade/buy/' + ${asset.currency.id}}"><button class="buy-btn">Buy</button></a>
-                    <button class="sell-btn">Sell</button>
-                    <a href="#" th:href="@{'/wallet/' + ${asset.id} + '/transfer'}"><button class="buy-btn">Transfer</button></a>
+                    <a href="#"><button class="sell-btn">Buy</button></a>
+                    <a href="#" th:href="@{'/wallet/' + ${asset.id} + '/transfer'}"><button class="transfert-btn">Transfer</button></a>
                 </div>
 
                 <div class="currency-detail-container">
