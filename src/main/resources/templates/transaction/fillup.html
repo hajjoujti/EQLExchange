@@ -5,29 +5,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Fill Up With Fiat Currencies</title>
+    <link rel="stylesheet" href="/css/trade.css">
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>Refill with fiat</h1>
-    <form th:object="${payment}" method="post" th:action="@{'/wallet/refill/pay'}">
-        <div>
-            <label th:text="${'Currency to debit the card in: '}"></label>
-            <select th:field="*{currency}">
-                <option th:each="i : ${fiatCurrencies}" th:text="${i.ticker}" th:value="${i.id}"></option>
-            </select>
-        </div>
-        <div>
-            <label th:text="${'Your card details: '}"></label>
-            <input type accept="text" th:field="*{card}" />
-        </div>
-        <div>
-            <label th:text="${'Amount to transfer: '}"></label>
-            <input type accept="text" th:field="*{amount}" />
-        </div>
 
-        <button type="submit" th:text="${'Refill your wallet'}"></button>
 
-    </form>
+    <h1 class="title-page"> Refill </h1>
+
+    <div class="trade-and-chart">
+        <div class="trade-container-bis">
+            <div class="title-trade">
+                <h3>Refill</h3>
+                <span>Refill your wallet</span>
+                <hr/>
+            </div>
+
+            <form th:object="${payment}" method="post" th:action="@{'/wallet/refill/pay'}">
+
+                <div class="img-and-form">
+                    <div class="refill-container">
+                        <div>
+                            <select th:field="*{currency}" class="just-select">
+                                <option th:each="i : ${fiatCurrencies}" th:text="${i.ticker}"
+                                        th:value="${i.id}"></option>
+                            </select>
+                            <input style="margin-top: 0px !important" placeholder="Amount" type accept="text" th:field="*{amount}" class="form-control">
+                            <input placeholder="Name" type="text" class="form-control">
+                            <input placeholder="Card number" type accept="text" th:field="*{card}" class="form-control">
+
+                        </div>
+
+                        <div class="cvc-expiry">
+                            <input type="text" placeholder="Expiry" class="form-control">
+                            <input type="text" placeholder="CVC" class="form-control">
+                        </div>
+                        <div class="btn-fillup">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        <div class="img-container">
+            <div>
+                <img class="img-card" th:src="@{/img/mastercard.png}"/>
+            </div>
+            <div>
+                <img class="img-card" th:src="@{/img/visa.png}"/>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<form th:object="${payment}" method="post" th:action="@{'/wallet/refill/pay'}">
+    <div>
+        <label th:text="${'Currency to debit the card in: '}"></label>
+        <select th:field="*{currency}">
+            <option th:each="i : ${fiatCurrencies}" th:text="${i.ticker}" th:value="${i.id}"></option>
+        </select>
+    </div>
+    <div>
+        <label th:text="${'Your card details: '}"></label>
+        <input type accept="text" th:field="*{card}"/>
+    </div>
+    <div>
+        <label th:text="${'Amount to transfer: '}"></label>
+        <input type accept="text" th:field="*{amount}"/>
+    </div>
+
+    <button type="submit" th:text="${'Refill your wallet'}"></button>
+
+</form>
 </div>
 </body>
 </html>
