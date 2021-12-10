@@ -5,19 +5,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Wallet History</title>
+    <link rel="stylesheet" href="/css/history.css">
 </head>
 <body>
+
+
 <div layout:fragment="content">
-    <div>
-        <table>
+
+    <div class="title">
+        <h1>Transaction history</h1>
+    </div>
+
+    <div class="history-container">
+        <table class="table table-dark">
+            <thead>
             <tr>
-                <th>Transaction ID</th>
-                <th>Date</th>
+                <th scope="col">Tx name</th>
+                <th scope="col">Date</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Amout</th>
             </tr>
+            </thead>
+            <tbody>
             <tr th:each="transaction : ${transactions}">
                 <td th:text="${transaction.txId}"></td>
-                <td th:text="${transaction.date}"></td>
+                <td th:text="${transaction.date.toString.replace('T', ' ')}"></td>
+                <td th:text="${transaction.sourceAsset.user.walletAddress.substring(0, 8) + '...' + transaction.sourceAsset.user.walletAddress.substring((transaction.sourceAsset.user.walletAddress.length() - 5), (transaction.sourceAsset.user.walletAddress.length() - 1))}"></td>
+                <td th:text="${transaction.sourceAsset.user.walletAddress.substring(0, 8) + '...' + transaction.targetAsset.user.walletAddress.substring((transaction.targetAsset.user.walletAddress.length() - 5), (transaction.targetAsset.user.walletAddress.length() - 1))}"></td>
+                <td th:text="${transaction.amount + ' ' + transaction.sourceAsset.currency.ticker}"></td>
             </tr>
+            </tbody>
         </table>
     </div>
 </div>

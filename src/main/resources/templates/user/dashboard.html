@@ -12,8 +12,6 @@
     <h1 id="eboard">E Board</h1>
 
     <div class="dashboard-container">
-
-
         <div class="asset-detail-container">
             <h2 class="title-block"><i style="color: white" class="fa fa-solid fa-coins"></i> Coins</h2>
             <div class="currency-block" th:if="!${currency.equals(eqlasset.currency)}" th:each="currency : ${currencies}">
@@ -27,7 +25,7 @@
                     <div style="display: flex">
                         <h2 th:text="${currency.ticker.toUpperCase()}" class="asset-detail-ticker"></h2>
                         <h4 class="price-currency"
-                            th:text="${ '$' + currency.currencyPrices.get(currency.currencyPrices.size() - 1).price}"></h4>
+                            th:text="${ '$' + #numbers.formatDecimal((currency.currencyPrices.get(currency.currencyPrices.size() - 1).price),1,3)}"></h4>
                     </div>
                     <div class="asset-description-container">
                         <span class="asset-detail-name" th:text="${ '(' + currency.name + ')'}"></span>
@@ -38,16 +36,15 @@
                 <div class="chart-and-detail-container">
                     <div>
                         <div class="btn-container">
-                            <button class="buy-btn">Buy</button>
-                            <button class="sell-btn">Sell</button>
-                            <button class="transfert-btn">Transfer</button>
+                            <a href="#" th:href="@{'/trade/buy/' + ${currency.id}}"><button class="buy-btn">Buy</button></a>
+                            <a href="#"><button class="sell-btn">Sell</button></a>
                         </div>
 
                         <div class="currency-detail-container">
                             <div class="token-infos">
                                 <span class="token-title-info">Total liquidity :</span>
                                 <span class="currency-details"
-                                      th:text="${currency.maximumSupply}"></span>
+                                      th:text="${currency.maximumSupply > 0 ? currency.maximumSupply : 'Unlimited'}"></span>
                                 <span class="token-title-info">Cirulating supply :</span>
                                 <span class="currency-details" th:text="${currency.circulatingSupply}"></span>
                                 <span class="token-title-info">Market Cap :</span>
@@ -91,9 +88,9 @@
                               th:text="${ '≈ ' + ((eqlasset.balance) * (eqlasset.currency.currencyPrices.get(eqlasset.currency.currencyPrices.size() - 1).price)) + '$'}"></span>
                     </div>
                     <div>
-                        <button class="buy-btn">Buy</button>
-                        <button class="sell-btn">Sell</button>
-                        <button class="transfert-btn">Transfer</button>
+                        <a href="#" th:href="@{'/trade/buy/' + ${eqlasset.currency.id}}"><button class="buy-btn">Buy</button></a>
+                        <a href="#"><button class="sell-btn">Sell</button></a>
+                        <a href="#" th:href="@{'/wallet/' + ${eqlasset.id} + '/transfer'}"><button class="transfert-btn">Transfer</button></a>
                     </div>
                 </div>
             </div>

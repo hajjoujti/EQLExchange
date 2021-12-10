@@ -83,8 +83,8 @@
                 <td th:unless="${transaction.sourceAsset.id.equals(asset.id)}" style="color: #28a745">
                     Buy
                 </td>
-                <td th:if="${transaction.sourceAsset.id.equals(asset.id)}" th:text="${'-' + transaction.amount}" style="color: red"></td>
-                <td  th:unless="${transaction.sourceAsset.id.equals(asset.id)}" th:text="${'+' + transaction.amount}" style="color: #28a745"></td>
+                <td th:if="${transaction.sourceAsset.id.equals(asset.id)}" th:text="${transaction.amount}" style="color: red"></td>
+                <td  th:unless="${transaction.sourceAsset.id.equals(asset.id)}" th:text="${transaction.amount}" style="color: #28a745"></td>
                 <td th:text="${asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price}"></td>
                 <td th:text="${transaction.amount * (asset.currency.currencyPrices.get(asset.currency.currencyPrices.size() - 1).price)     }"></td>
                 <th scope="row" th:text="${transaction.txId}"></th>
