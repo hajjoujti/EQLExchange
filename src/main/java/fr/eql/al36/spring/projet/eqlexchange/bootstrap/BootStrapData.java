@@ -130,10 +130,10 @@ public class BootStrapData implements CommandLineRunner {
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(ethereum, LocalDateTime.now().minusMinutes(5),30,3922.09));
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(binanceCoin, LocalDateTime.now().minusMinutes(5),30,544.18));
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(eqlcoin, LocalDateTime.now().minusMinutes(5),30,.5));
-        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(dollar, LocalDateTime.now().minusMinutes(5),30));
-        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(euro, LocalDateTime.now().minusMinutes(5),30));
-        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(pound, LocalDateTime.now().minusMinutes(5),30));
-        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(tether, LocalDateTime.now().minusMinutes(5),30));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(dollar, LocalDateTime.now().minusMinutes(5),30, 1));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(euro, LocalDateTime.now().minusMinutes(5),30, 1.13));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(pound, LocalDateTime.now().minusMinutes(5),30, 1.32));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(tether, LocalDateTime.now().minusMinutes(5),30, 1));
 
 
         ////////////////////////////////
