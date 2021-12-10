@@ -3,6 +3,9 @@ package fr.eql.al36.spring.projet.eqlexchange.bootstrap;
 import fr.eql.al36.spring.projet.eqlexchange.domain.*;
 import fr.eql.al36.spring.projet.eqlexchange.repository.*;
 import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyPriceService;
+import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyService;
+import fr.eql.al36.spring.projet.eqlexchange.service.TradeOrderService;
+import fr.eql.al36.spring.projet.eqlexchange.service.TransactionService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -10,12 +13,15 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
 public class BootStrapData implements CommandLineRunner {
 
     private final AssetRepository assetRepository;
+
+    private final CurrencyService currencyService;
 
     private final CurrencyRepository currencyRepository;
 
@@ -25,9 +31,13 @@ public class BootStrapData implements CommandLineRunner {
 
     private final CurrencyTypeRepository currencyTypeRepository;
 
+    private final TradeOrderService tradeOrderService;
+
     private final TradeOrderRepository tradeOrderRepository;
 
     private final PaymentRepository paymentRepository;
+
+    private final TransactionService transactionService;
 
     private final TransactionRepository transactionRepository;
 
@@ -38,19 +48,22 @@ public class BootStrapData implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
 
-    public BootStrapData(AssetRepository assetRepository, CurrencyRepository currencyRepository,
+    public BootStrapData(AssetRepository assetRepository, CurrencyService currencyService, CurrencyRepository currencyRepository,
                          CurrencyPriceService currencyPriceService, CurrencyPriceRepository currencyPriceRepository, CurrencyTypeRepository currencyTypeRepository,
-                         TradeOrderRepository tradeOrderRepository, PaymentRepository paymentRepository,
-                         TransactionRepository transactionRepository, UserRepository userRepository,
+                         TradeOrderService tradeOrderService, TradeOrderRepository tradeOrderRepository, PaymentRepository paymentRepository,
+                         TransactionService transactionService, TransactionRepository transactionRepository, UserRepository userRepository,
                          AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
 
         this.assetRepository = assetRepository;
+        this.currencyService = currencyService;
         this.currencyRepository = currencyRepository;
         this.currencyPriceService = currencyPriceService;
         this.currencyPriceRepository = currencyPriceRepository;
         this.currencyTypeRepository = currencyTypeRepository;
+        this.tradeOrderService = tradeOrderService;
         this.tradeOrderRepository = tradeOrderRepository;
         this.paymentRepository = paymentRepository;
+        this.transactionService = transactionService;
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
@@ -108,10 +121,10 @@ public class BootStrapData implements CommandLineRunner {
         Currency pound = currencyRepository.save(Currency.builder().name("Pound Sterling").ticker("GBP").currencyType(
                 fiat).circulatingSupply("80000000000").build());
 
+
         ////////////////////////////////
         // CURRENCY PRICES
         ////////////////////////////////
-
 
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(bitcoin, LocalDateTime.now().minusMinutes(5),30,47128.33));
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(ethereum, LocalDateTime.now().minusMinutes(5),30,3922.09));
@@ -121,32 +134,6 @@ public class BootStrapData implements CommandLineRunner {
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(euro, LocalDateTime.now().minusMinutes(5),30));
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(pound, LocalDateTime.now().minusMinutes(5),30));
         currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(tether, LocalDateTime.now().minusMinutes(5),30));
-
-        /*
-        CurrencyPrice bitcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
-                47128.33).dateTime(LocalDateTime.now()).build());
-        currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
-                38000).dateTime((LocalDateTime.of(2021, 6, 2, 18, 6, 52))).build());
-        currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
-                22034.56).dateTime((LocalDateTime.of(2021, 11, 2, 13, 32, 0))).build());
-        currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
-                22034.56).dateTime((LocalDateTime.of(2021, 12, 8, 13, 32, 0))).build());
-        CurrencyPrice ethereumPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(ethereum).price(
-                3922.09).dateTime(LocalDateTime.now()).build());
-        CurrencyPrice binanceCoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(binanceCoin)
-                                                                              .price(544.18)
-                                                                              .dateTime(LocalDateTime.now()).build());
-        CurrencyPrice tetherPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(tether).price(1.0)
-                                                                         .dateTime(LocalDateTime.now()).build());
-        CurrencyPrice eqlcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(eqlcoin).price(.5)
-                                                                          .dateTime(LocalDateTime.now()).build());
-        CurrencyPrice dollarPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(dollar).price(1.0)
-                                                                         .dateTime(LocalDateTime.now()).build());
-        CurrencyPrice euroPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(euro).price(1.13)
-                                                                       .dateTime(LocalDateTime.now()).build());
-        CurrencyPrice poundPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(pound).price(1.32)
-                                                                        .dateTime(LocalDateTime.now()).build());
-        */
 
 
         ////////////////////////////////
@@ -187,249 +174,90 @@ public class BootStrapData implements CommandLineRunner {
                 passwordEncoder.encode("jesusmarietf1")).walletAddress(
                 "EQL_DEBD5C88C70C54820665D03373F1DB3EFE45551F5D3856EDD6A9EAC7920435D9").authorities(userSet).build());
 
+
         ////////////////////////////////
         // ASSETS
         ////////////////////////////////
 
         // OWNER ASSET
 
-        Asset ownerDollar = assetRepository.save(Asset.builder().user(owner).currency(dollar).balance(10000).build());
+        Asset ownerDollar = assetRepository.save(Asset.builder().user(owner).currency(dollar).balance(1000000).build());
 
-        Asset ownerEuro = assetRepository.save(Asset.builder().user(owner).currency(euro).balance(5000).build());
+        Asset ownerEuro = assetRepository.save(Asset.builder().user(owner).currency(euro).balance(500000).build());
 
-        Asset ownerPound = assetRepository.save(Asset.builder().user(owner).currency(pound).balance(1000).build());
+        Asset ownerPound = assetRepository.save(Asset.builder().user(owner).currency(pound).balance(100000).build());
 
-        Asset ownerBitcoin = assetRepository.save(Asset.builder().user(owner).currency(bitcoin).balance(5).build());
+        Asset ownerBitcoin = assetRepository.save(Asset.builder().user(owner).currency(bitcoin).balance(1000).build());
 
-        Asset ownerEthereum = assetRepository.save(Asset.builder().user(owner).currency(ethereum).balance(10).build());
+        Asset ownerEthereum = assetRepository.save(Asset.builder().user(owner).currency(ethereum).balance(10000).build());
 
-        Asset ownerBinanceCoin = assetRepository.save(Asset.builder().user(owner).currency(binanceCoin).balance(20)
-                                                              .build());
+        Asset ownerBinanceCoin = assetRepository.save(Asset.builder().user(owner).currency(binanceCoin).balance(50000).build());
 
-        Asset ownerTether = assetRepository.save(Asset.builder().user(owner).currency(tether).balance(10000).build());
+        Asset ownerTether = assetRepository.save(Asset.builder().user(owner).currency(tether).balance(1000000).build());
 
-        Asset ownerEQLCoin = assetRepository.save(Asset.builder().user(owner).currency(eqlcoin).balance(1000).build());
+        Asset ownerEQLCoin = assetRepository.save(Asset.builder().user(owner).currency(eqlcoin).balance(100000).build());
 
-        // ALAIN ASSET
-        Asset alainDollar = assetRepository.save(Asset.builder().user(alain).currency(dollar).balance(20).build());
 
-        Asset alainEuro = assetRepository.save(Asset.builder().user(alain).currency(euro).balance(0).build());
+        //AUTOMATED ASSET GENERATION
+        for (User user : userRepository.findAll()) {
+            if (user.getId() > 1) {
+                System.out.println("Creating assets and trade orders for " + user.getUsername());
+                for (Currency currency : currencyRepository.findAll()) {
+                    Asset asset = new Asset();
+                    double randomAmount = Math.random() * 10000 / currencyPriceService.getLatestPriceOFCurrency(currency).getPrice();
+                    assetRepository.save(Asset.builder().user(user).currency(currency).balance(randomAmount).build());
+                    System.out.println(" - " + currency.getTicker() + " asset: " + randomAmount + " " + currency.getTicker());
 
-        Asset alainPound = assetRepository.save(Asset.builder().user(alain).currency(pound).balance(0).build());
-
-        Asset alainBitcoin = assetRepository.save(Asset.builder().user(alain).currency(bitcoin).balance(.02239446)
-                                                          .build());
-
-        Asset alainEthereum = assetRepository.save(Asset.builder().user(alain).currency(ethereum).balance(.0551802)
-                                                           .build());
-
-        Asset alainBinanceCoin = assetRepository.save(Asset.builder().user(alain).currency(binanceCoin).balance(.65766)
-                                                              .build());
-
-        Asset alainTether = assetRepository.save(Asset.builder().user(alain).currency(tether).balance(20.015223)
-                                                         .build());
-
-        Asset alainEQLCoin = assetRepository.save(Asset.builder().user(alain).currency(eqlcoin).balance(0).build());
-
-        // ANNESOPHIE ASSET
-
-        Asset annesophieDollar = assetRepository.save(Asset.builder().user(annesophie).currency(dollar).balance(0)
-                                                              .build());
-
-        Asset annesophieEuro = assetRepository.save(Asset.builder().user(annesophie).currency(euro).balance(35)
-                                                            .build());
-
-        Asset annesophiePound = assetRepository.save(Asset.builder().user(annesophie).currency(pound).balance(0)
-                                                             .build());
-
-        Asset annesophieBitcoin = assetRepository.save(Asset.builder().user(annesophie).currency(bitcoin)
-                                                               .balance(.06445).build());
-
-        Asset annesophieEthereum = assetRepository.save(Asset.builder().user(annesophie).currency(ethereum)
-                                                                .balance(.031458).build());
-
-        Asset annesophieBinanceCoin = assetRepository.save(Asset.builder().user(annesophie).currency(binanceCoin)
-                                                                   .balance(.8451).build());
-
-        Asset annesophieTether = assetRepository.save(Asset.builder().user(annesophie).currency(tether)
-                                                              .balance(31.84565).build());
-
-        Asset annesophieEQLCoin = assetRepository.save(Asset.builder().user(annesophie).currency(eqlcoin).balance(0)
-                                                               .build());
-
-        // ROBERT ASSET
-
-        Asset robertDollar = assetRepository.save(Asset.builder().user(robert).currency(dollar).balance(0).build());
-
-        Asset robertEuro = assetRepository.save(Asset.builder().user(robert).currency(euro).balance(0).build());
-
-        Asset robertPound = assetRepository.save(Asset.builder().user(robert).currency(pound).balance(30).build());
-
-        Asset robertBitcoin = assetRepository.save(Asset.builder().user(robert).currency(bitcoin).balance(.13568)
-                                                           .build());
-
-        Asset robertEthereum = assetRepository.save(Asset.builder().user(robert).currency(ethereum).balance(1.045)
-                                                            .build());
-
-        Asset robertBinanceCoin = assetRepository.save(Asset.builder().user(robert).currency(binanceCoin)
-                                                               .balance(.68426).build());
-
-        Asset robertTether = assetRepository.save(Asset.builder().user(robert).currency(tether).balance(32.852)
-                                                          .build());
-
-        Asset robertEQLCoin = assetRepository.save(Asset.builder().user(robert).currency(eqlcoin).balance(0).build());
+                }
+            }
+        }
 
 
         ////////////////////////////////
         // TRADE ORDERS
         ////////////////////////////////
 
-
-        // ALAIN TRADE ORDERS
-
-        // Alain wants to sell .0015 BTC for BNB
-        TradeOrder to1 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(alain)
-                .currencyToBuy(binanceCoin)
-                .amountToBuy(.2)
-                .currencyToSell(bitcoin)
-                .amountToSell(0.0015)
-                .creationDate(LocalDateTime.of(2021, 6, 2, 18, 6, 52))
-                .build());
-
-        // Alain wants to sell .027 ETH for BNB
-        TradeOrder to2 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(alain)
-                .currencyToBuy(binanceCoin)
-                .currencyToSell(ethereum)
-                .amountToBuy(0.008)
-               .amountToSell(.027)
-
-               .creationDate(LocalDateTime.of(2021, 6, 2, 18, 27, 04))
-               .build());
-
-        // Alain wants to sell .0012 BTC for EQL
-        TradeOrder to3 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(alain)
-                .currencyToBuy(eqlcoin)
-                .currencyToSell(bitcoin)
-                .amountToBuy(0.0012)
-                .amountToSell(0.15)
-                .creationDate(LocalDateTime.of(2021, 6, 2, 19, 1, 44))
-                .build());
+        //AUTOMATED TRADE ORDER GENERATION
+        for (User user : userRepository.findAll()) {
+            if (user.getId() > 1) {
+                System.out.println("Creating assets and trade orders for " + user.getUsername());
+                for (Currency currency : currencyRepository.findAll()) {
+                    int randomCurrencyId = currency.getId();
+                    while (randomCurrencyId == currency.getId()) {
+                        randomCurrencyId = (int) Math.ceil(Math.random() * 8);
+                    }
+                    Currency randomCurrency = currencyRepository.findById(randomCurrencyId).get();
+                    double randomAmountToSell = assetRepository.getAssetByUserAndCurrency(user, currency).getBalance() * Math.random();
+                    double calculatedAmountToBuy = currencyService.getCurrencyAmountIn(randomCurrency, currency, randomAmountToSell);
+                    System.out.println("   - trade order for " + currency.getTicker() + ":");
+                    System.out.println("   - Sell " + randomAmountToSell + " " + currency.getTicker());
+                    System.out.println("   - Buy " + calculatedAmountToBuy + " " + randomCurrency.getTicker());
 
 
-        // ANNE-SOPHIE TRADE ORDERS
+                    TradeOrder tradeOrder = TradeOrder.builder()
+                            .user(user)
+                            .currencyToBuy(randomCurrency)
+                            .amountToBuy(calculatedAmountToBuy)
+                            .currencyToSell(currency)
+                            .amountToSell(randomAmountToSell)
+                            .creationDate(LocalDateTime.now())
+                            .build();
 
-        // Anne-Sophie wants to sell .002 BTC for EQL
-        TradeOrder to4 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(annesophie)
-                .amountToBuy(500)
-                .amountToSell(0.002)
-                .currencyToBuy(eqlcoin)
-                .currencyToSell(bitcoin)
-                .creationDate(LocalDateTime.of(2021, 6, 3, 9, 26, 11)).build());
+                    tradeOrder = tradeOrderService.place(tradeOrder);
 
-        // Anne-Sophie wants to sell .0194 BNB for ETH
-        TradeOrder to5 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(annesophie)
-                .amountToBuy(0.05)
-                .amountToSell(0.194)
-               .currencyToBuy(ethereum)
-                .currencyToSell(binanceCoin)
-               .creationDate(LocalDateTime.of(2021, 6, 3, 10, 01, 57))
-               .build());
+                    System.out.println("Trade order placed");
+                    List<TradeOrder> matchingTradeOrders = tradeOrderService.match(tradeOrder);
 
+                    if (matchingTradeOrders.size() > 0) {
+                        for (TradeOrder matchingTradeOrder : matchingTradeOrders) {
+                            System.out.println("maaatch: " + matchingTradeOrder.getId());
+                        }
 
-        // ROBERT TRADE ORDERS
-
-        // Robert wants to sell 200 EQL for BTC
-        TradeOrder to6 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(robert)
-                .amountToBuy(.005)
-                .amountToSell(200)
-                .currencyToBuy(bitcoin)
-                .currencyToSell(eqlcoin)
-                .creationDate(LocalDateTime.of(2021, 6, 3, 11, 04, 3))
-                .build());
-
-        // Robert wants to sell .021 BNB for EQL
-        TradeOrder to7 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(robert)
-                .amountToBuy(500)
-                .amountToSell(0.021)
-                .currencyToBuy(eqlcoin)
-                .currencyToSell(binanceCoin)
-                .creationDate(LocalDateTime.of(2021, 6, 3, 11, 07, 21)).build());
-
-
-        ////////////////////////////////
-        // TRANSACTIONS
-        ////////////////////////////////
-
-
-        // TRANSACTION 1
-
-        // Involves orders 2 and 5
-
-        // Alain (2) gets 0.194 BNB (order 5's amount) and Anne-Sophie (5) gets 0.027 ETH (order 2's amount)
-
-        // 1. Alain's ETH asset is debited with order 3's amount
-        Asset alainWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(alain,
-                                                                                   to2.getCurrencyToBuy());
-        alainWantedCurrencyAsset.setBalance(alainWantedCurrencyAsset.getBalance() - to5.getAmountToBuy());
-
-        // 2. Anne-Sophie's BNB asset is debited with order 3's amount
-        Asset annesophieWantedCurrencyAsset = assetRepository.getAssetByUserAndCurrency(annesophie,
-                                                                                        to5.getCurrencyToBuy());
-        annesophieWantedCurrencyAsset.setBalance(annesophieWantedCurrencyAsset.getBalance() - to2.getAmountToBuy());
-
-
-        // 3. Alain's BNB asset is credited with his order's amount
-        alainBinanceCoin.setBalance(alainBinanceCoin.getBalance() + to2.getAmountToBuy());
-
-        // 3. Anne-Sophie's ETH asset is credited with her order's amount
-        annesophieEthereum.setBalance(annesophieEthereum.getBalance() + to5.getAmountToBuy());
-
-        // Both orders are completely satisfied and are updated with completion date
-
-        Transaction transaction1 = transactionRepository.save(Transaction.builder()
-                .date(LocalDateTime.of(2021, 6, 3, 10, 2, 1))
-                .amount(3)
-                .txId("tx_c4ca4238a0b923820dcc509a6f75849b")
-                .sourceAsset(annesophieEthereum)
-                .targetAsset(alainEthereum)
-                .build());
-
-
-        // TRANSACTION 2
-
-        // Involves orders 3 and 6
-        // Alain (3) gets 118.1 EQL (/!\ only a part of order 6's amount)
-        // Robert (6) gets 0.0012 BTC (order 3's amount)
-
-        to6.setAmountToBuy(to6.getAmountToBuy() + to3.getAmountToBuy());
-
-        Transaction transaction2 = transactionRepository.save(Transaction.builder().date(
-                LocalDateTime.of(2021, 6, 3, 11, 4, 5))
-                .amount(40.9)
-                .txId("tx_c81e728d9d4c2f636f067f89cc14862c")
-                .sourceAsset(alainBitcoin)
-                .targetAsset(robertBitcoin)
-                .build());
-
-        // Order 3 is satisfied, but not order 6
-        // A new order is created with Order 6 remaining amount at the end transaction completion
-
-        TradeOrder to8 = tradeOrderRepository.save(TradeOrder.builder()
-                .user(robert)
-                .amountToBuy(2)
-                .amountToSell(1000)
-                .currencyToBuy(bitcoin)
-                .currencyToSell(eqlcoin)
-                .creationDate(LocalDateTime.of(2021, 6, 3, 11, 4, 7))
-                .build());
-
+                        TradeOrder selectedTradeOrder = tradeOrderService.selectBestAmong(tradeOrder, matchingTradeOrders);
+                        transactionService.executeFromTradeOrders(tradeOrder, selectedTradeOrder);
+                    }
+                }
+            }
+        }
     }
-
 }
