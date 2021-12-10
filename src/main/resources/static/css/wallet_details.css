@@ -210,3 +210,7 @@
 .title-block {
     padding: 10px;
 }
+
+.dashboard-container .container-assets {
+    padding: 0px 20px 55px 20px;
+}
