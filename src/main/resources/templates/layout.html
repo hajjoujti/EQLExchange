@@ -8,7 +8,6 @@
 </head>
 <body>
 <div layout:insert="aside"></div>
-<div layout:insert="footer"></div>
 
 <script th:inline="javascript">
 
@@ -30,7 +29,7 @@
         seconds = priceAndDate.dateTime.time.second;
         dateTime = new Date(year,month,day,hour,minutes,seconds);
         if(dateTime.getDate() == today.getDate()) {
-            xValues.push("Today " + dateTime.toLocaleTimeString());
+            xValues.push(dateTime.toLocaleTimeString());
         } else if(dateTime.getDate() == today.getDate() - 1) {
             xValues.push("Yesterday " + dateTime.toLocaleTimeString());
         } else{
@@ -55,7 +54,14 @@
             }]
         },
         options: {
-            legend: {display: false},
+            legend: {
+                display: false,
+                labels: {
+                    font: {
+                        size: 18
+                    }
+                }
+            },
             scales: {
                 yAxes: [{ticks: {min: 0}}],
             }
