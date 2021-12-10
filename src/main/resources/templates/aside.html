@@ -33,11 +33,11 @@
                     <a href="#" th:href="@{'/wallet/refill'}"><span class="fas fa-arrow-down mr-3"></span><span class="nav-icon-attribute">Refill</span></a>
                 </li>
                 <li>
-                    <a href="#" th:href="@{'/user/update'}"><i class="fa fa-solid fa-gear"></i><span class="nav-icon-attribute">Settings</span></a>
+                    <a href="#" ><i class="fa fa-solid fa-gear"></i><span class="nav-icon-attribute">Settings</span></a>
                 </li>
                 <hr>
                 <li>
-                    <a href="#" th:href="@{'/user/profile'}"><i class="fa fa-regular fa-user"></i><span class="nav-icon-attribute" th:text="${sessionUser.firstName + ' (' + sessionUser.username + ')'}"></span></a>
+                    <a href="#" ><i class="fa fa-regular fa-user"></i><span class="nav-icon-attribute" th:text="${sessionUser.firstName + ' (' + sessionUser.username + ')'}"></span></a>
                 </li>
                 <li>
                     <div sec:authorize="isAuthenticated()">
