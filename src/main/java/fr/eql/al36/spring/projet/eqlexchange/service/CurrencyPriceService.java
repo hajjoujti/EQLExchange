@@ -68,17 +68,20 @@ public class CurrencyPriceService {
         return currencyPrices;
     }
 
-    public List<CurrencyPrice> generateLinearCurrencyPrices(Currency currency, LocalDateTime startDateTime, Integer interval) {
+    public List<CurrencyPrice> generateLinearCurrencyPrices(Currency currency, LocalDateTime startDateTime, Integer interval, double value) {
         List<CurrencyPrice> currencyPrices = new ArrayList<>();
 
         LocalDateTime dateTime = startDateTime;
-        double price = 1;
 
-        System.out.println("Generating linear prices for currency " + currency.getTicker() + " at " + price + "$ from " + startDateTime + " every " + interval + " seconds");
+        System.out.println("Generating linear prices for currency " + currency.getTicker() + " at " + value + "$ from " + startDateTime + " every " + interval + " seconds");
         while (dateTime.isBefore((LocalDateTime.now()))) {
+            double fluctuatingValue;
+            double randomValue = value * Math.random() * .3;
+            if (Math.random() > .5) fluctuatingValue = value + randomValue;
+            else fluctuatingValue = value - randomValue;
             CurrencyPrice currencyPrice = new CurrencyPrice();
             currencyPrice.setCurrency(currency);
-            currencyPrice.setPrice(price);
+            currencyPrice.setPrice(fluctuatingValue);
             currencyPrice.setDateTime(dateTime);
             currencyPrices.add(currencyPrice);
             dateTime = dateTime.plusSeconds(interval);
