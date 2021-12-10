@@ -110,7 +110,7 @@ public class TradeOrderService {
 
         for (TradeOrder candidateTradeOrder : candidateTradeOrders) {
             double candidateValue = getReferenceValue(candidateTradeOrder);
-            if(referenceValue / candidateValue >= MAX_SLIPPAGE_RATE && candidateValue / referenceValue >= MAX_SLIPPAGE_RATE) {
+            if(candidateValue / referenceValue >= MAX_SLIPPAGE_RATE) {
                 return candidateTradeOrder;
             }
             else if(referenceValue / candidateValue >= .5 && referenceValue / candidateValue <= 2) {
