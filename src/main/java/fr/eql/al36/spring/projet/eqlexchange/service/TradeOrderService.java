@@ -138,7 +138,11 @@ public class TradeOrderService {
     }
 
     public TradeOrder place(TradeOrder tradeOrder) {
-        if (assetRepository.getAssetByUserAndCurrency(tradeOrder.getUser(),tradeOrder.getCurrencyToBuy()).getBalance() >= tradeOrder.getAmountToBuy()) {
+        System.out.println("place: tradeOrder.getUser()" + tradeOrder.getUser().getUsername());
+        System.out.println("place: tradeOrder.getCurrencyToBuy()" + tradeOrder.getCurrencyToSell().getTicker());
+        System.out.println("place: assetRepository.getAssetByUserAndCurrency(tradeOrder.getUser(),tradeOrder.getCurrencyToBuy()).getBalance()" + assetRepository.getAssetByUserAndCurrency(tradeOrder.getUser(),tradeOrder.getCurrencyToSell()).getBalance());
+        System.out.println("place: tradeOrder.getAmountToBuy()" + tradeOrder.getAmountToSell());
+        if (assetRepository.getAssetByUserAndCurrency(tradeOrder.getUser(),tradeOrder.getCurrencyToSell()).getBalance() >= tradeOrder.getAmountToSell()) {
             tradeOrder = tradeOrderRepository.save(tradeOrder);
             return tradeOrder;
         }
