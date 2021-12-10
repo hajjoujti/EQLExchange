@@ -55,7 +55,7 @@ public class AssetService {
     public Asset getEqlAssetByUser(User user) {
         List<Asset> assets = assetRepository.getAllByUser(user);
         for (Asset asset : assets) {
-            if (asset.getCurrency().getTicker().equals("XQL")) {
+            if (asset.getCurrency().getId() == 5) {
                 return asset;
             }
         }
