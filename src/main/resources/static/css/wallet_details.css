@@ -214,3 +214,7 @@
 .dashboard-container .container-assets {
     padding: 0px 20px 55px 20px;
 }
+
+.dashboard-container .asset-detail-ticker {
+    font-size: 25px;
+}
