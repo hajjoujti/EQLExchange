@@ -83,7 +83,7 @@
                 </div>
                 <div class="btn-container">
                     <div class="own-container">
-                        <h5 th:text="${eqlasset.balance + ' ' + eqlasset.currency.ticker}"></h5>
+                        <h5 th:text="${ #numbers.formatDecimal(eqlasset.balance,1,3)  + ' ' + eqlasset.currency.ticker}"></h5>
                         <span class="asset-contract"
                               th:text="${ '≈ ' + ((eqlasset.balance) * (eqlasset.currency.currencyPrices.get(eqlasset.currency.currencyPrices.size() - 1).price)) + '$'}"></span>
                     </div>
