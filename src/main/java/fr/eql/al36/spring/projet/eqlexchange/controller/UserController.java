@@ -53,7 +53,7 @@ public class UserController {
         model.addAttribute("sessionUser", connectedUser);
         model.addAttribute("assets", assets);
         model.addAttribute("currencyPricesJSON",
-                           currencyPriceService.getCurrencyPricesJSON(currencyService.findByTicker("XQL")));
+                           currencyPriceService.getCurrencyPricesJSON(currencyService.findCurrencyById(5)));
         return "user/dashboard";
     }
 
