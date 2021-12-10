@@ -21,7 +21,7 @@ public class CurrencyPriceDTO {
     public String toString() {
         return "CurrencyPriceDTO{" +
                "price=" + price +
-               ", dateTime=" + dateTime +
+               ", dateTime=" + dateTime.getHour() + ":" + dateTime.getMinute() + ":" + dateTime.getSecond() +
                '}';
     }
 
