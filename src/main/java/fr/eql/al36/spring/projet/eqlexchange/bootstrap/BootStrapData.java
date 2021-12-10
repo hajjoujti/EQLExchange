@@ -2,6 +2,7 @@ package fr.eql.al36.spring.projet.eqlexchange.bootstrap;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.*;
 import fr.eql.al36.spring.projet.eqlexchange.repository.*;
+import fr.eql.al36.spring.projet.eqlexchange.service.CurrencyPriceService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,8 @@ public class BootStrapData implements CommandLineRunner {
     private final AssetRepository assetRepository;
 
     private final CurrencyRepository currencyRepository;
+
+    private final CurrencyPriceService currencyPriceService;
 
     private final CurrencyPriceRepository currencyPriceRepository;
 
@@ -36,13 +39,14 @@ public class BootStrapData implements CommandLineRunner {
 
 
     public BootStrapData(AssetRepository assetRepository, CurrencyRepository currencyRepository,
-                         CurrencyPriceRepository currencyPriceRepository, CurrencyTypeRepository currencyTypeRepository,
+                         CurrencyPriceService currencyPriceService, CurrencyPriceRepository currencyPriceRepository, CurrencyTypeRepository currencyTypeRepository,
                          TradeOrderRepository tradeOrderRepository, PaymentRepository paymentRepository,
                          TransactionRepository transactionRepository, UserRepository userRepository,
                          AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
 
         this.assetRepository = assetRepository;
         this.currencyRepository = currencyRepository;
+        this.currencyPriceService = currencyPriceService;
         this.currencyPriceRepository = currencyPriceRepository;
         this.currencyTypeRepository = currencyTypeRepository;
         this.tradeOrderRepository = tradeOrderRepository;
@@ -91,7 +95,7 @@ public class BootStrapData implements CommandLineRunner {
                         cryptocurrency).contractAddress("0xdac17f958d2ee523a2206206994597c13d831ec7")
                                                           .circulatingSupply("74157654134").build());
 
-        Currency eqlcoin = currencyRepository.save(Currency.builder().name("EQL Coin").ticker("XQL").currencyType(
+        Currency eqlcoin = currencyRepository.save(Currency.builder().name("EQL Coin").ticker("EQL").currencyType(
                         cryptocurrency).contractAddress("0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae").circulatingSupply("1000")
                                                            .build());
 
@@ -105,9 +109,20 @@ public class BootStrapData implements CommandLineRunner {
                 fiat).circulatingSupply("80000000000").build());
 
         ////////////////////////////////
-        // CURRENCIES PRICES
+        // CURRENCY PRICES
         ////////////////////////////////
 
+
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(bitcoin, LocalDateTime.now().minusMinutes(5),30,47128.33));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(ethereum, LocalDateTime.now().minusMinutes(5),30,3922.09));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(binanceCoin, LocalDateTime.now().minusMinutes(5),30,544.18));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateRandomCurrencyPrices(eqlcoin, LocalDateTime.now().minusMinutes(5),30,.5));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(dollar, LocalDateTime.now().minusMinutes(5),30));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(euro, LocalDateTime.now().minusMinutes(5),30));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(pound, LocalDateTime.now().minusMinutes(5),30));
+        currencyPriceService.saveCurrencyPrices(currencyPriceService.generateLinearCurrencyPrices(tether, LocalDateTime.now().minusMinutes(5),30));
+
+        /*
         CurrencyPrice bitcoinPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
                 47128.33).dateTime(LocalDateTime.now()).build());
         currencyPriceRepository.save(CurrencyPrice.builder().currency(bitcoin).price(
@@ -131,6 +146,8 @@ public class BootStrapData implements CommandLineRunner {
                                                                        .dateTime(LocalDateTime.now()).build());
         CurrencyPrice poundPrice = currencyPriceRepository.save(CurrencyPrice.builder().currency(pound).price(1.32)
                                                                         .dateTime(LocalDateTime.now()).build());
+        */
+
 
         ////////////////////////////////
         // USERS ROLES
