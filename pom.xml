@@ -11,6 +11,7 @@
     <groupId>fr.eql.al36.spring.projet</groupId>
     <artifactId>EQLExchange</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>EQLExchange</name>
     <description>The brand new EQL market place is coming.</description>
     <properties>
