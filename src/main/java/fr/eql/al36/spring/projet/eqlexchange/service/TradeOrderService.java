@@ -1,15 +1,12 @@
 package fr.eql.al36.spring.projet.eqlexchange.service;
 
 import fr.eql.al36.spring.projet.eqlexchange.domain.TradeOrder;
-import fr.eql.al36.spring.projet.eqlexchange.domain.Transaction;
 import fr.eql.al36.spring.projet.eqlexchange.repository.CurrencyPriceRepository;
-import fr.eql.al36.spring.projet.eqlexchange.domain.User;
 import fr.eql.al36.spring.projet.eqlexchange.repository.AssetRepository;
 import fr.eql.al36.spring.projet.eqlexchange.repository.TradeOrderRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,12 +20,18 @@ public class TradeOrderService {
     private final TradeOrderRepository tradeOrderRepository;
     private final CurrencyPriceRepository currencyPriceRepository;
     private final AssetRepository assetRepository;
+    private final CurrencyPriceService currencyPriceService;
+    private final CurrencyService currencyService;
 
     public TradeOrderService(TradeOrderRepository tradeOrderRepository, CurrencyPriceRepository currencyPriceRepository,
-                             AssetRepository assetRepository) {
+                             AssetRepository assetRepository,
+                             CurrencyPriceService currencyPriceService,
+                             CurrencyService currencyService) {
         this.tradeOrderRepository = tradeOrderRepository;
         this.currencyPriceRepository = currencyPriceRepository;
         this.assetRepository = assetRepository;
+        this.currencyPriceService = currencyPriceService;
+        this.currencyService = currencyService;
     }
 
 
@@ -147,5 +150,15 @@ public class TradeOrderService {
             return tradeOrder;
         }
         return null;
+    }
+
+    public double calculateCurrencyToBuyAmount(Integer currencyToSellId, Integer currencyToBuyId, double amountToSell){
+        if(currencyToSellId == null){
+            return 0;
+        }
+        double currencyToSellLatestPrice = currencyPriceService.getLatestPriceOFCurrency(currencyService.findCurrencyById(currencyToSellId)).getPrice();
+        double currencyToBuyLatestPrice = currencyPriceService.getLatestPriceOFCurrency(currencyService.findCurrencyById(currencyToBuyId)).getPrice();
+        System.out.println("amounttttttt" + amountToSell * currencyToSellLatestPrice / currencyToBuyLatestPrice);
+        return amountToSell * currencyToSellLatestPrice / currencyToBuyLatestPrice;
     }
 }
